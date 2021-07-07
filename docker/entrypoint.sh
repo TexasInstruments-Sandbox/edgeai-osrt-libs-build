@@ -32,9 +32,6 @@
 
 set -e
 
-# get proxy argument passes
-export USE_PROXY=$1
-
 # setup proxy as required
 /setup_proxy.sh
 

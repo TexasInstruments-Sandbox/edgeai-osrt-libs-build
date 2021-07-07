@@ -47,6 +47,11 @@ After pulling the source (see below), the folder structure looks like below:
 ## Docker Environment for Building
 
 ### Initialize QEMU to emulate ARM architecture on x86 Ubuntu PC
+If QEMU was not installed on the build Ubuntu PC,
+```
+sudo apt-get install -y qemu-user-static
+
+To initialize the QENU,
 ```
 ./qemu_init.sh
 ```

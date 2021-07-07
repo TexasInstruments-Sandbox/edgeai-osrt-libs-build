@@ -35,8 +35,16 @@ if [ "$#" -lt 1 ]; then
 else
     CMD="$@"
 fi
+
+# Modify the server and proxy URLs as requied
+ping bitbucket.itg.ti.com -c 1 > /dev/null 2>&1
+if [ "$?" -eq "0" ]; then
+    USE_PROXY=ti
+fi
+
 docker run -it --rm \
     -v $(pwd)/..:/root/dlrt-build \
     --network host \
+    --env USE_PROXY=$USE_PROXY \
     arm64v8-ubuntu18-py36-gcc9 \
     $CMD
