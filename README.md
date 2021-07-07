@@ -1,9 +1,14 @@
 QEMU-based Build DL Runtime for J7 Target Docker Containers
 ===========================================================
 
+## Overview
 Currently covers ONNX-RT and FTLite for Ubuntu 18.04 Docker container.
 
+### Build using QEMU on PC
 ![](docs/dlrt_build_qemu.svg)
+
+### Build & Run Apps in Target Docker Container
+![](docs/target_docker.svg)
 
 ## Clone This GIT repo
 ```
@@ -11,7 +16,6 @@ git clone <this_repo_url>
 cd dlrt-build
 WORK_DIR=$(pwd)
 ```
-
 
 After pulling the source (see below), the folder structure looks like below:
 ```
