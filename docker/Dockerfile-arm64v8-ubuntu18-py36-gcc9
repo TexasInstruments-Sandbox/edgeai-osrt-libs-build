@@ -84,7 +84,8 @@ RUN echo "if [ -n \"$BASH_VERSION\" ]; then"     >  .profile && \
     echo "#!/bin/bash"                           >  .bashrc  && \
     echo "export PS1=\"${debian_chroot:+($debian_chroot)}\u@docker:\w\$ \"" >> .bashrc
 
-WORKDIR /root/dlrt-build
+ENV WORK_DIR=/root/dlrt-build
+WORKDIR $WORK_DIR
 
 # setup entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
