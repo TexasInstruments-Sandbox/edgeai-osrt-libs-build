@@ -4,13 +4,13 @@ QEMU-based Build DL Runtime for J7 Target Docker Containers
 ## Overview
 Currently covers ONNX-RT and FTLite for Ubuntu 18.04 Docker container.
 
-### Build using QEMU on PC
+### Build DL Runtime using QEMU on PC
 ![](docs/dlrt_build_qemu.svg)
 
-### Build & Run Apps in Target Docker Container
+### Build & Run Apps in Target Docker Container: To be covered in Edge AI / Robotics SDK
 ![](docs/target_docker.svg)
 
-## Clone This GIT repo
+## Clone GIT repo
 ```
 git clone <this_repo_url>
 cd dlrt-build
@@ -48,12 +48,12 @@ After pulling the source (see below), the folder structure looks like below:
 
 ### Initialize QEMU to emulate ARM architecture on x86 Ubuntu PC
 ```
-docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+./qemu_init.sh
 ```
 
 ### Build Docker Image for Building
 ```
-cd $WORK_DIR/docker
+cd docker
 ./docker_build.sh
 ```
 
@@ -89,13 +89,12 @@ cd $WORK_DIR/docker
 ./docker_run.sh
 ```
 
-####  Build PROTOBUF
-Inside the container:
+To build PROTOBUF: inside the container,
 ```
 ./onnxrt_protobuf_build.sh
 ```
 
-#### Build ONNX-RT
+To build ONNX-RT,
 ```
 ./onnxrt_build.sh
 ```
@@ -131,8 +130,7 @@ cd $WORK_DIR/docker
 ./docker_run.sh
 ```
 
-#### Build TFLite
-Inside the container:
+Inside the container,
 ```
 ./tflite_build.sh
 ```
