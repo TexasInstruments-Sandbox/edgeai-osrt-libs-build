@@ -1,8 +1,8 @@
 #! /bin/bash
 # This script should be run inside the CONTAINER
 # Outputs:
-# - onnxrumtime/build/Linux/Release/libonnxruntime.so.1.7.0
-# - onnxrumtime/build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl
+# - onnxruntime/build/Linux/Release/libonnxruntime.so.1.7.0
+# - onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl
 
 # update how many CPUs to use
 NPROC=8
@@ -16,3 +16,4 @@ cd onnxruntime
 --path_to_protoc_exe $(pwd)/cmake/external/protobuf/src/protoc \
 --use_tidl \
 --build_wheel
+cd -

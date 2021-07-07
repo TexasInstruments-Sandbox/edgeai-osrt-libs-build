@@ -12,3 +12,4 @@ git am ../patches/tflite/0001-tflite-interpreter-add-support-for-custom-data.pat
 # update build config: tensorflow/lite/tools/make/targets/aarch64_makefile.inc
 # TARGET_TOOLCHAIN_PREFIX :=
 cp ../patches/tflite/aarch64_makefile.inc ./tensorflow/lite/tools/make/targets/aarch64_makefile.inc
+cd -
