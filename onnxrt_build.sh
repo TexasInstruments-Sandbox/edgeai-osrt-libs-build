@@ -6,12 +6,14 @@
 
 # protobuf options:
 # a) in case of building protobuf from source
-# --path_to_protoc_exe $(pwd)/cmake/external/protobuf/src/protoc \
+#    --path_to_protoc_exe $(pwd)/cmake/external/protobuf/src/protoc \
 # b) in case of using pre-built protobuf
-# --path_to_protoc_exe $(pwd)/cmake/external/protoc-3.11.3-linux-aarch_64/bin/protoc \
+#    --path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
+#    update PROTOBUF_VER as in onnxrt_prepare.sh
 
 # update how many CPUs to use
-NPROC=10
+NPROC=8
+PROTOBUF_VER=3.11.3
 cd onnxruntime
 ./build.sh --parallel $NPROC \
 --skip_tests \
@@ -20,7 +22,7 @@ cd onnxruntime
 --config Release \
 --cmake_extra_defines="CMAKE_TOOLCHAIN_FILE=$(pwd)/tool.cmake" \
 # --path_to_protoc_exe $(pwd)/cmake/external/protobuf/src/protoc \
---path_to_protoc_exe $(pwd)/cmake/external/protoc-3.11.3-linux-aarch_64/bin/protoc \
+--path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
 --use_tidl \
 --build_wheel
 cd -

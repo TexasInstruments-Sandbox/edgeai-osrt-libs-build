@@ -18,6 +18,7 @@ cd -
 # pre-built protobuf
 # update PROTOBUF_VER by, e.g., "git log" at onnxruntime/cmake/external/protoc
 PROTOBUF_VER=3.11.3
-PROTOBUF_URL=https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/protoc-${PROTOBUF_VER}-linux-aarch_64.zip
-wget $PROTOBUF_URL
-unzip protoc-${PROTOBUF_VER}-linux-aarch_64.zip -d onnxruntime/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64
+ZIP_FILE=protoc-${PROTOBUF_VER}-linux-aarch_64.zip
+wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/${ZIP_FILE}
+unzip ${ZIP_FILE} -d onnxruntime/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64
+rm ${ZIP_FILE}

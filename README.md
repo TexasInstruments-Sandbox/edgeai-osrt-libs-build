@@ -89,7 +89,7 @@ cd $WORK_DIR
 ```
 
 ### Build
-The following should be run in the Docker container with QEMU.
+Update `PROTOBUF_VER` to match to the setting in `onnxrt_prepare.sh`. The following should be run in the Docker container with QEMU.
 ```
 cd $WORK_DIR/docker
 ./docker_run.sh
