@@ -27,7 +27,8 @@ After pulling the source (see below), the folder structure looks like below:
 │   ├── entrypoint.sh
 │   └── setup_proxy.sh
 ├── docs
-│   └── dlrt_build_qemu.svg
+│   ├── dlrt_build_qemu.svg
+│   └── target_docker.svg
 ├── onnxruntime_          # ONNX-RT source folder
 ├── tensorflow            # Tensorflow source folder
 ├── patches
@@ -50,6 +51,7 @@ After pulling the source (see below), the folder structure looks like below:
 If QEMU was not installed on the build Ubuntu PC,
 ```
 sudo apt-get install -y qemu-user-static
+```
 
 To initialize the QENU,
 ```
@@ -62,44 +64,43 @@ cd docker
 ./docker_build.sh
 ```
 
-**Note**: The base Docker images `arm64v8/ubuntu:18.04` is NOT yet registered in the TI artifactory. So `docker_build.sh` does not work in TI network.
+**Note**: The base Docker images `arm64v8/ubuntu:18.04` is NOT yet registered in the TI artifactory. So `docker_build.sh` does not work inside the TI network.
 
-This will take several minutes. You can check the resulting docker images:
+It will take several minutes building the Docker image. After "docker build" completed, you can check the resulting docker image:
 ```
 $ docker images
 REPOSITORY                   TAG         IMAGE ID       CREATED             SIZE
 arm64v8-ubuntu18-py36-gcc9   latest      6f545823db99   36 seconds ago      768MB
 ```
 
-<!-- ### Start the Docker Container
-```
-cd $WORK_DIR/docker
-./docker_run.sh
-``` -->
-
 <!-- ======================================= -->
 ## Build ONNX-RT from Source
 
 ### Prepare the source, apply the patch (Edge AI 0.5), update config
-You can run this on the Ubuntu PC command-line.
+
+Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "git log" at `onnxruntime/cmake/external/protoc`. Currently it is set:
+`PROTOBUF_VER=3.11.3`.
+
+
+You can run the following in the Ubuntu PC command-line for downloading source from git repo, applying patches, and downloading pre-built `protobuf`:
 ```
 cd $WORK_DIR
 ./onnxrt_prepare.sh
 ```
 
 ### Build
-This should be run in the Docker container with QEMU.
+The following should be run in the Docker container with QEMU.
 ```
 cd $WORK_DIR/docker
 ./docker_run.sh
 ```
 
-To build PROTOBUF: inside the container,
+(Optional) To build `protobuf` from source, run the following inside the container. 
 ```
 ./onnxrt_protobuf_build.sh
 ```
 
-To build ONNX-RT,
+Update "`--path_to_protoc_exe`" in `onnxrt_build.sh` accordingly. To build ONNX-RT, run the following inside the container,
 ```
 ./onnxrt_build.sh
 ```
@@ -112,7 +113,7 @@ Outputs:
 ### Deploy to J7 target
 Update `J7_IP_ADDR` in `onnxrt_deploy.sh`.
 
-On the build Ubuntu PC command-line:
+Run the following script in the Ubuntu PC command-line which will `scp` the resulting `.so` and `.whl` files to the target:
 ```
 cd $WORK_DIR
 ./onnxrt_deploy.sh
@@ -122,14 +123,14 @@ cd $WORK_DIR
 ## Build TFLite from Source
 
 ### Prepare the source, apply the patch (Edge AI 0.5), update config
-You can run this on the Ubuntu PC command-line.
+You can run the following script in the Ubuntu PC command-line.
 ```
 cd $WORK_DIR
 ./tflite_prepare.sh
 ```
 
 ### Build
-This should be run in the Docker container with QEMU.
+To build the tensorflow from source, run the following in the Docker container with QEMU.
 ```
 cd $WORK_DIR/docker
 ./docker_run.sh
@@ -147,11 +148,12 @@ Outputs:
 ### Deploy to J7 target
 Update `J7_IP_ADDR` in `tflite_deploy.sh`.
 
-On the build Ubuntu PC command-line:
+Run the following script in the Ubuntu PC command-line which will `scp` the resulting `.a` file to the target:
 ```
 cd $WORK_DIR
 ./tflite_deploy.sh
 ```
+
 
 
 
