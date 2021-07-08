@@ -1,8 +1,8 @@
-QEMU-based Build DL Runtime for J7 Target Docker Containers
+QEMU-based DL Runtime Build for J7 Target Docker Containers
 ===========================================================
 
 ## Overview
-Currently covers ONNX-RT and FTLite for Ubuntu 18.04 Docker container.
+Currently this covers ONNX-RT and FTLite-RT for Ubuntu 18.04 Docker container, but it should be straightforward to extend to other DL-RT and/or for other Ubuntu distro. This is for Edge AI 0.5 release. For other release, patches and settings should be updated accordingly.
 
 ### Build DL Runtime using QEMU on PC
 ![](docs/dlrt_build_qemu.svg)
@@ -21,25 +21,25 @@ After pulling the source (see below), the folder structure looks like below:
 ```
 .
 ├── docker
-│   ├── docker_build.sh
-│   ├── Dockerfile-arm64v8-ubuntu18-py36-gcc9
-│   ├── docker_run.sh
-│   ├── entrypoint.sh
-│   └── setup_proxy.sh
+│   ├── Dockerfile-arm64v8-ubuntu18-py36-gcc9
+│   ├── docker_build.sh
+│   ├── docker_run.sh
+│   ├── entrypoint.sh
+│   └── setup_proxy.sh
 ├── docs
-│   ├── dlrt_build_qemu.svg
-│   └── target_docker.svg
-├── onnxruntime_          # ONNX-RT source folder
-├── tensorflow            # Tensorflow source folder
+│   ├── dlrt_build_qemu.svg
+│   └── target_docker.svg
+├── onnxruntime_              # ONNX-RT source folder
+├── tensorflow                # Tensorflow source folder
 ├── patches
-│   ├── onnxrt
-│   └── tflite
+│   ├── onnxrt
+│   └── tflite
 ├── README.md
 ├── qemu_init.sh
 ├── onnxrt_build.sh
 ├── onnxrt_deploy.sh
 ├── onnxrt_prepare.sh
-├── onnxrt_protobuf_build.sh
+├── onnxrt_protobuf_build.sh  # Optional
 ├── tflite_build.sh
 ├── tflite_deploy.sh
 └── tflite_prepare.sh
@@ -47,7 +47,7 @@ After pulling the source (see below), the folder structure looks like below:
 
 ## Docker Environment for Building
 
-### Initialize QEMU to emulate ARM architecture on x86 Ubuntu PC
+### Initialize QEMU to Emulate ARM Architecture on x86 Ubuntu PC
 If QEMU was not installed on the build Ubuntu PC,
 ```
 sudo apt-get install -y qemu-user-static
@@ -64,9 +64,9 @@ cd docker
 ./docker_build.sh
 ```
 
-**Note**: The base Docker images `arm64v8/ubuntu:18.04` is NOT yet registered in the TI artifactory. So `docker_build.sh` does not work inside the TI network.
+**Note**: The base Docker image `arm64v8/ubuntu:18.04` is NOT yet registered in the TI artifactory. So `docker_build.sh` does not work inside the TI network.
 
-It will take several minutes building the Docker image. After "docker build" completed, you can check the resulting docker image:
+It will take several minutes building the Docker image. After "`docker build`" completed, you can check the resulting docker image:
 ```
 $ docker images
 REPOSITORY                   TAG         IMAGE ID       CREATED             SIZE
@@ -76,9 +76,9 @@ arm64v8-ubuntu18-py36-gcc9   latest      6f545823db99   36 seconds ago      768M
 <!-- ======================================= -->
 ## Build ONNX-RT from Source
 
-### Prepare the source, apply the patch (Edge AI 0.5), update config
+### Prepare the Source, apply Patches (Edge AI 0.5), Update Config
 
-Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "git log" at `onnxruntime/cmake/external/protoc`. Currently it is set:
+Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `onnxruntime/cmake/external/protoc`. Currently it is set:
 `PROTOBUF_VER=3.11.3`.
 
 
@@ -95,7 +95,7 @@ cd $WORK_DIR/docker
 ./docker_run.sh
 ```
 
-(Optional) To build `protobuf` from source, run the following inside the container. 
+(Optional) To build `protobuf` from source, run the following inside the container.
 ```
 ./onnxrt_protobuf_build.sh
 ```
@@ -110,8 +110,8 @@ Outputs:
 - Wheel file: `build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl`
 
 
-### Deploy to J7 target
-Update `J7_IP_ADDR` in `onnxrt_deploy.sh`.
+### Deploy to J7 Target
+Update `J7_IP_ADDR` in `onnxrt_deploy.sh` for the IP address assigned to the J7 EVM. It's recommended to use a static IP for the EVM.
 
 Run the following script in the Ubuntu PC command-line which will `scp` the resulting `.so` and `.whl` files to the target:
 ```
@@ -122,7 +122,7 @@ cd $WORK_DIR
 <!-- ======================================= -->
 ## Build TFLite from Source
 
-### Prepare the source, apply the patch (Edge AI 0.5), update config
+### Prepare the Source, apply Patches (Edge AI 0.5), Update config
 You can run the following script in the Ubuntu PC command-line.
 ```
 cd $WORK_DIR
@@ -145,7 +145,7 @@ Outputs:
 - Static lib: `tensorflow/lite/tools/make/gen/linux_aarch64/lib/libtensorflow-lite.a`
 - Wheel file: TODO
 
-### Deploy to J7 target
+### Deploy to J7 Target
 Update `J7_IP_ADDR` in `tflite_deploy.sh`.
 
 Run the following script in the Ubuntu PC command-line which will `scp` the resulting `.a` file to the target:
