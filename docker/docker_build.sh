@@ -30,21 +30,19 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Number of process
-NPROC=8
-
-#Modify the server and proxy URLs as requied
+# modify the server and proxy URLs as requied
 ping bitbucket.itg.ti.com -c 1 > /dev/null 2>&1
 if [ "$?" -eq "0" ]; then
     REPO_LOCATION=artifactory.itg.ti.com/docker-public-arm/
-    sed -i 's@ENV USE_PROXY=.*@ENV USE_PROXY=ti@' Dockerfile
+    ARG_USE_PROXY=ti
 else
     REPO_LOCATION=arm64v8/
+    ARG_USE_PROXY=none
 fi
 
 # Build docker image
 docker build \
-    -f Dockerfile-arm64v8-ubuntu18-py36-gcc9 \
     -t arm64v8-ubuntu18-py36-gcc9 \
     --build-arg REPO_LOCATION=$REPO_LOCATION \
-    --build-arg NPROC=$NPROC .
+    --build-arg ARG_USE_PROXY=$USE_PROXY \
+    -f Dockerfile-arm64v8-ubuntu18-py36-gcc9 .

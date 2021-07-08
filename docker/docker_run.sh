@@ -40,6 +40,8 @@ fi
 ping bitbucket.itg.ti.com -c 1 > /dev/null 2>&1
 if [ "$?" -eq "0" ]; then
     USE_PROXY=ti
+else
+    USE_PROXY=none
 fi
 
 docker run -it --rm \

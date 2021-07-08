@@ -31,8 +31,8 @@
 ARG REPO_LOCATION='arm64v8'
 FROM ${REPO_LOCATION}ubuntu:18.04
 ARG DEBIAN_FRONTEND=noninteractive
-ARG NPROC=1
-ENV USE_PROXY=none
+ARG ARG_USE_PROXY=none
+ENV USE_PROXY=$ARG_USE_PROXY
 
 # setup proxy settings
 ADD entrypoint.sh setup_proxy.sh /
@@ -45,6 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     wget \
     unzip \
+    corkscrew \
     vim && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
