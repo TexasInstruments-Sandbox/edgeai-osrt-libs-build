@@ -30,19 +30,24 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+DOCKERTAG=arm64v8-ubuntu18-py36-gcc9
+DOCKERFILE=Dockerfile-arm64v8-ubuntu18-py36-gcc9
+
 # modify the server and proxy URLs as requied
 ping bitbucket.itg.ti.com -c 1 > /dev/null 2>&1
 if [ "$?" -eq "0" ]; then
-    REPO_LOCATION=artifactory.itg.ti.com/docker-public-arm/
-    ARG_USE_PROXY=ti
+    USE_PROXY=1
+    REPO_LOCATION=artifactory.itg.ti.com/docker-public-arm
+    HTTP_PROXY=http://webproxy.ext.ti.com:80
 else
-    REPO_LOCATION=arm64v8/
-    ARG_USE_PROXY=none
+    REPO_LOCATION=arm64v8
+    USE_PROXY=0
 fi
 
 # Build docker image
 docker build \
-    -t arm64v8-ubuntu18-py36-gcc9 \
+    -t $DOCKERTAG \
+    --build-arg USE_PROXY=$USE_PROXY \
     --build-arg REPO_LOCATION=$REPO_LOCATION \
-    --build-arg ARG_USE_PROXY=$USE_PROXY \
-    -f Dockerfile-arm64v8-ubuntu18-py36-gcc9 .
+    --build-arg HTTP_PROXY=$HTTP_PROXY \
+    -f $DOCKERFILE .

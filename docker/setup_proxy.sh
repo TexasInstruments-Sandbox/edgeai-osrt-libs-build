@@ -30,7 +30,7 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-if [ "$USE_PROXY" = "ti" ]; then
+if [ "$USE_PROXY" = "1" ]; then
 	# apt proxy
 	if [ ! -f /etc/apt/apt.conf ]; then
 		echo "Acquire::http::proxy \"http://webproxy.ext.ti.com:80\";" > /etc/apt/apt.conf

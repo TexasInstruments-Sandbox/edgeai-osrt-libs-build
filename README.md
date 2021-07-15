@@ -2,7 +2,7 @@ QEMU-based DL Runtime Build for J7 Target Docker Containers
 ===========================================================
 
 ## Overview
-Currently this covers ONNX-RT and FTLite-RT for Ubuntu 18.04 Docker container, but it should be straightforward to extend to other DL-RT and/or for other Ubuntu distro. This is for Edge AI 0.5 release. For other release, patches and settings should be updated accordingly.
+Currently this covers building ONNX-RT and FTLite-RT from source for Ubuntu 18.04 (tested) and Ubuntu 20.04 (not yet tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for Edge AI 0.5 release. For other release, patches and settings should be updated accordingly.
 
 ### Build DL Runtime using QEMU on PC
 ![](docs/dlrt_build_qemu.svg)
@@ -22,6 +22,7 @@ After pulling the source (see below), the folder structure looks like below:
 .
 ├── docker
 │   ├── Dockerfile-arm64v8-ubuntu18-py36-gcc9
+│   ├── Dockerfile-arm64v8-ubuntu20-py38-gcc9
 │   ├── docker_build.sh
 │   ├── docker_run.sh
 │   ├── entrypoint.sh
@@ -64,7 +65,7 @@ cd docker
 ./docker_build.sh
 ```
 
-**Note**: The base Docker image `arm64v8/ubuntu:18.04` is NOT yet registered in the TI artifactory. So `docker_build.sh` does not work inside the TI network.
+**TI Proxy**: The script and Dockerfile should be also run inside TI network. All the necessary proxy setting are provided.
 
 It will take several minutes building the Docker image. After "`docker build`" completed, you can check the resulting docker image:
 ```
@@ -153,9 +154,3 @@ Run the following script in the Ubuntu PC command-line which will `scp` the resu
 cd $WORK_DIR
 ./tflite_deploy.sh
 ```
-
-
-
-
-
-

@@ -34,7 +34,7 @@ ARG REPO_LOCATION=arm64v8
 ARG DEBIAN_FRONTEND=noninteractive
 
 #=========================================================================
-FROM ${REPO_LOCATION}/ubuntu:18.04 AS base-0
+FROM ${REPO_LOCATION}/ubuntu:20.04 AS base-0
 
 #=========================================================================
 FROM base-0 AS base-1
