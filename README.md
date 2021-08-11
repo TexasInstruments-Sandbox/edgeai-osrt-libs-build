@@ -2,7 +2,15 @@ QEMU-based DL Runtime Build for J7 Target Docker Containers
 ===========================================================
 
 ## Overview
-Currently this covers building ONNX-RT and FTLite-RT from source for Ubuntu 18.04 (tested) and Ubuntu 20.04 (not yet tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for Edge AI 0.5 release. For other release, patches and settings should be updated accordingly.
+Currently this covers building *ONNX-RT* and *FTLite-RT* from source for Ubuntu 18.04 (tested) and Ubuntu 20.04 (not yet tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for Edge AI 0.5 release. For other release, patches and settings should be updated accordingly.
+
+### DL Runtime Library Packages
+
+|         | x86_64 Ubuntu 18.04  | aarch64 J7 PSDK-Linux | aarch64 Ubuntu 18.04 | aarch64 Ubuntu 20.04 |
+| ------- | -------------------- | --------------------- | -------------------- | -------------------- |
+| DLR     | .whl from TIDL build | .ipk from Ycoto build | Not yet covered      | Not yet covered      |
+| ONNX-RT | .whl from TIDL build | .ipk from Ycoto build | .so & .whl from This | .so & .whl from This |
+| TFL-RT  | .whl from TIDL build | .ipk from Ycoto build | .a from This         | .a from This         |
 
 ### Build DL Runtime using QEMU on PC
 ![](docs/dlrt_build_qemu.svg)
