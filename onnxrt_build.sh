@@ -21,7 +21,6 @@ cd onnxruntime
 --build_shared_lib \
 --config Release \
 --cmake_extra_defines="CMAKE_TOOLCHAIN_FILE=$(pwd)/tool.cmake" \
-# --path_to_protoc_exe $(pwd)/cmake/external/protobuf/src/protoc \
 --path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
 --use_tidl \
 --build_wheel

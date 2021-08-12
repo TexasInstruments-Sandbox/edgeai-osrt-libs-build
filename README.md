@@ -2,15 +2,15 @@ QEMU-based DL Runtime Build for J7 Target Docker Containers
 ===========================================================
 
 ## Overview
-Currently this covers building *ONNX-RT* and *FTLite-RT* from source for Ubuntu 18.04 (tested) and Ubuntu 20.04 (not yet tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for Edge AI 0.5 release. For other release, patches and settings should be updated accordingly.
+Currently this covers building *ONNX-RT* and *FTLite-RT* from source for Ubuntu 18.04 (tested) and Ubuntu 20.04 (not yet tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for PSDK 8.0 release. For other release, patches and settings should be updated accordingly.
 
 ### DL Runtime Library Packages
 
-|         | x86_64 Ubuntu 18.04  | aarch64 J7 PSDK-Linux | aarch64 Ubuntu 18.04 | aarch64 Ubuntu 20.04 |
-| ------- | -------------------- | --------------------- | -------------------- | -------------------- |
-| DLR     | .whl from TIDL build | .ipk from Ycoto build | Not yet covered      | Not yet covered      |
-| ONNX-RT | .whl from TIDL build | .ipk from Ycoto build | .so & .whl from This | .so & .whl from This |
-| TFL-RT  | .whl from TIDL build | .ipk from Ycoto build | .a from This         | .a from This         |
+|         | x86_64 Ubuntu 18.04  | aarch64 J7 PSDK-Linux | aarch64 Ubuntu 18.04 | aarch64 Ubuntu 20.04 | aarch64 Debian   |
+| ------- | -------------------- | --------------------- | -------------------- | -------------------- | ---------------- |
+| DLR     | .whl from TIDL build | .ipk from Ycoto build | Not yet covered      | Not yet covered      | Not yet covered  |
+| ONNX-RT | .whl from TIDL build | .ipk from Ycoto build | .so & .whl from This | .so & .whl from This | Not yet covered  |
+| TFL-RT  | .whl from TIDL build | .ipk from Ycoto build | .a from This         | .a from This         | Not yet covered  |
 
 ### Build DL Runtime using QEMU on PC
 ![](docs/dlrt_build_qemu.svg)
@@ -85,7 +85,7 @@ arm64v8-ubuntu18-py36-gcc9   latest      6f545823db99   36 seconds ago      768M
 <!-- ======================================= -->
 ## Build ONNX-RT from Source
 
-### Prepare the Source, apply Patches (Edge AI 0.5), Update Config
+### Prepare the Source, Update Config
 
 Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `onnxruntime/cmake/external/protoc`. Currently it is set:
 `PROTOBUF_VER=3.11.3`.
@@ -115,8 +115,8 @@ Update "`--path_to_protoc_exe`" in `onnxrt_build.sh` accordingly. To build ONNX-
 ```
 
 Outputs:
-- Shared lib: `build/Linux/Release/libonnxruntime.so.1.7.0`
-- Wheel file: `build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl`
+- Shared lib: `<onnxruntime>/build/Linux/Release/libonnxruntime.so.1.7.0`
+- Wheel file: `<onnxruntime>/build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl`
 
 
 ### Deploy to J7 Target
@@ -131,7 +131,7 @@ cd $WORK_DIR
 <!-- ======================================= -->
 ## Build TFLite from Source
 
-### Prepare the Source, apply Patches (Edge AI 0.5), Update config
+### Prepare the Source, Update config
 You can run the following script in the Ubuntu PC command-line.
 ```
 cd $WORK_DIR
@@ -151,7 +151,7 @@ Inside the container,
 ```
 
 Outputs:
-- Static lib: `tensorflow/lite/tools/make/gen/linux_aarch64/lib/libtensorflow-lite.a`
+- Static lib: `<tensorflow>/tensorflow/lite/tools/make/gen/linux_aarch64/lib/libtensorflow-lite.a`
 - Wheel file: TODO
 
 ### Deploy to J7 Target

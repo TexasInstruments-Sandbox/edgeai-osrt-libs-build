@@ -1,10 +1,8 @@
 #! /bin/bash
-git clone --single-branch -b r2.4 https://github.com/tensorflow/tensorflow.git tensorflow
+REPO_BRANCH="tidl-j7"
+REPO_TAG="TIDL_PSDK_8.0"
+git clone https://github.com/TexasInstruments/tensorflow.git --branch $REPO_BRANCH --single-branch tensorflow
 cd tensorflow
-git checkout -b tidl_branch 582c8d236cb079023657287c318ff26adb239002
-
-# apply patch (Edge AI 0.5)
-git am ../patches/tflite/0001-tflite-interpreter-add-support-for-custom-data.patch
 
 # download dependencies
 ./tensorflow/lite/tools/make/download_dependencies.sh
