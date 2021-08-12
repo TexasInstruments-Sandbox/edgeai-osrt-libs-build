@@ -119,13 +119,11 @@ Outputs:
 - Wheel file: `<onnxruntime>/build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl`
 
 
-### Deploy to J7 Target
-Update `J7_IP_ADDR` in `onnxrt_deploy.sh` for the IP address assigned to the J7 EVM. It's recommended to use a static IP for the EVM.
-
-Run the following script in the Ubuntu PC command-line which will `scp` the resulting `.so` and `.whl` files to the target:
+### Package
+To package the resulting `.so` and  `.whl` files and header files, you can use the following script:
 ```
 cd $WORK_DIR
-./onnxrt_deploy.sh
+./onnxrt_package.sh
 ```
 
 <!-- ======================================= -->
@@ -154,11 +152,10 @@ Outputs:
 - Static lib: `<tensorflow>/tensorflow/lite/tools/make/gen/linux_aarch64/lib/libtensorflow-lite.a`
 - Wheel file: TODO
 
-### Deploy to J7 Target
-Update `J7_IP_ADDR` in `tflite_deploy.sh`.
+### Package
+To package the resulting `.a` file and header files, you can use the following script:
 
-Run the following script in the Ubuntu PC command-line which will `scp` the resulting `.a` file to the target:
 ```
 cd $WORK_DIR
-./tflite_deploy.sh
+./tflite_package.sh
 ```
