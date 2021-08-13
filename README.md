@@ -126,6 +126,24 @@ cd $WORK_DIR
 ./onnxrt_package.sh
 ```
 
+Packaging structure:
+```
+$ tree onnxruntime-aarch64-ubuntu18.04 -L 4
+onnxruntime-aarch64-ubuntu18.04
+├── include
+│   └── onnxruntime
+│       └── core
+│           ├── common
+│           ├── framework
+│           ├── graph
+│           ├── optimizer
+│           ├── platform
+│           ├── providers
+│           └── session
+├── libonnxruntime.so.1.7.0
+└── onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl
+```
+
 <!-- ======================================= -->
 ## Build TFLite from Source
 
@@ -158,4 +176,27 @@ To package the resulting `.a` file and header files, you can use the following s
 ```
 cd $WORK_DIR
 ./tflite_package.sh
+```
+
+Packaging structure:
+```
+$ tree tensorflow-aarch64-ubuntu18.04 -L 4
+tensorflow-aarch64-ubuntu18.04
+├── include
+│   └── flatbuffers
+│       ├── base.h
+│       ├── code_generators.h
+│       ├── flatbuffers.h
+│       ├── flatc.h
+│       ├── flexbuffers.h
+│       ├── grpc.h
+│       ├── hash.h
+│       ├── idl.h
+│       ├── minireflect.h
+│       ├── reflection_generated.h
+│       ├── reflection.h
+│       ├── registry.h
+│       ├── stl_emulation.h
+│       └── util.h
+└── libtensorflow-lite.a
 ```

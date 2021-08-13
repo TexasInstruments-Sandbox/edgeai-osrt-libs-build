@@ -13,4 +13,3 @@ cp -r $INCLUDE_DIR $DST_DIR
 tar czvf $TARBALL $DST_DIR
 mkdir -p tarballs
 mv $TARBALL tarballs
-# rm -rf $DST_DIR
