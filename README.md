@@ -1,6 +1,10 @@
 QEMU-based DL Runtime Build for J7 Target Docker Containers
 ===========================================================
 
+## Related Jira Tickets
+* https://jira.itg.ti.com/browse/JACINTOREQ-1557
+* https://jira.itg.ti.com/browse/ADASVISION-4967
+
 ## Overview
 Currently this covers building *ONNX-RT* and *FTLite-RT* from source for Ubuntu 18.04 (tested) and Ubuntu 20.04 (not yet tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for PSDK 8.0 release. For other release, patches and settings should be updated accordingly.
 
