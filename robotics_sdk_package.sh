@@ -5,8 +5,8 @@ DST_DIR=dlrt-libs-aarch64-ubuntu18.04
 TARBALL=${DST_DIR}_${REL_VER}.tar.gz
 
 # mkdir
-rm -rf $DST_DIR
 mkdir -p $DST_DIR
+rm $DST_DIR/*.so* rm $DST_DIR/*.a
 
 # ONNX
 LIB_DIR=./onnxruntime/build/Linux/Release
