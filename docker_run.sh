@@ -30,9 +30,32 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-set -e
+# ARCH: arm64
+ARCH=arm64
 
-# setup proxy as required
-/setup_proxy.sh
+# base image: ubuntu:22.04, ubuntu20.04, debian:12.5, ...
+: "${BASE_IMAGE:=ubuntu:22.04}"
 
-exec "$@"
+# SDK version
+SDK_VER=9.2.0
+
+# docker tag
+DOCKER_TAG=dlrt-builder-${SDK_VER}:${ARCH}-${BASE_IMAGE//:/}
+echo "DOCKER_TAG = $DOCKER_TAG"
+
+if [ "$#" -lt 1 ]; then
+    CMD=/bin/bash
+else
+    CMD="$@"
+fi
+
+docker run -it --rm \
+    -v ${PWD}/scripts:/root/dlrt-build/scripts \
+    -v ${PWD}/patches:/root/dlrt-build/patches \
+    -v ${PWD}/workarea:/root/dlrt-build/workarea \
+    --privileged \
+    --network host \
+    --env USE_PROXY=$USE_PROXY \
+    --env ARCH=$ARCH \
+    --env BASE_IMAGE=$BASE_IMAGE \
+      $DOCKER_TAG $CMD

@@ -28,13 +28,14 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+ARG ARCH
+ARG BASE_IMAGE
 ARG USE_PROXY
 ARG HTTP_PROXY
-ARG REPO_LOCATION=arm64v8
 ARG DEBIAN_FRONTEND=noninteractive
 
 #=========================================================================
-FROM ${REPO_LOCATION}/ubuntu:20.04 AS base-0
+FROM --platform=linux/${ARCH} ${BASE_IMAGE} AS base-0
 
 #=========================================================================
 FROM base-0 AS base-1
@@ -45,58 +46,51 @@ ENV http_proxy=${HTTP_PROXY}
 ENV https_proxy=${HTTP_PROXY}
 
 #=========================================================================
-FROM base-${USE_PROXY} AS ubuntu-stage1
+FROM base-${USE_PROXY}
+ARG ARCH
 ARG DEBIAN_FRONTEND
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # setup proxy settings
-ADD entrypoint.sh setup_proxy.sh /
-RUN /setup_proxy.sh
+ADD setup_proxy.sh /root/
+ADD proxy /root/proxy
+RUN /root/setup_proxy.sh
 
 # build-esssential and other tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    cmake git wget unzip corkscrew vim && \
+    cmake git wget curl unzip corkscrew vim && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-#=========================================================================
-FROM ubuntu-stage1 AS ubuntu-stage2
-ARG DEBIAN_FRONTEND
 
 # install software-properties-common to use add-apt-repository
 RUN apt-get update && apt-get install -y \
     software-properties-common && \
     rm -rf /var/lib/apt/lists/*
 
-# install gcc-9: add-apt-repository needs env variables http_proxy and https_proxy in a proxy network
-RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
-    apt-get update && apt-get install -y --no-install-recommends \
-    gcc-9 g++-9 && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 && \
-    rm -rf /var/lib/apt/lists/*
-
-#=========================================================================
-FROM ubuntu-stage2 AS ubuntu-stage3
-ARG DEBIAN_FRONTEND
-
-# python packages, cmake >= 3.13
+# python packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	libopenblas-dev \
     python3-dev \
     python3-pip \
     python3-setuptools && \
     python3 -m pip install --upgrade pip && \
-    python3 -m pip install --upgrade cmake && \
     python3 -m pip install numpy setuptools wheel pybind11 pytest && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#=========================================================================
-FROM ubuntu-stage3 AS ubuntu-stage4
-ARG DEBIAN_FRONTEND
+# cmake >= 3.24
+RUN apt-get remove cmake -y && \
+    python3 -m pip install --upgrade cmake && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # ONNX-RT build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xorg-server-source libtool automake && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+#=========================================================================
+# add scripts
+COPY entrypoint.sh /root/entrypoint.sh
 
 ## .profile and .bashrc
 WORKDIR /root
@@ -113,4 +107,4 @@ ENV WORK_DIR=/root/dlrt-build
 WORKDIR $WORK_DIR
 
 # setup entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/root/entrypoint.sh"]

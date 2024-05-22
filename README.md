@@ -6,9 +6,11 @@ QEMU-based DL Runtime Build for J7 Target Docker Containers
 * https://jira.itg.ti.com/browse/ADASVISION-4967
 
 ## Overview
-Currently this covers building *ONNX-RT* and *FTLite-RT* from source for Ubuntu 18.04 (tested) and Ubuntu 20.04 (not yet tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for PSDK 8.0 release. For other release, patches and settings should be updated accordingly.
+Currently this covers building *ONNX-RT* and *FTLite-RT* from source for Ubuntu 22.04 (tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for PSDK 9.2 release. For other release, patches and settings should be updated accordingly.
 
 ### DL Runtime Library Packages
+
+TODO: update the table
 
 |         | x86_64 Ubuntu 18.04  | aarch64 J7 PSDK-Linux | aarch64 Ubuntu 18.04 | aarch64 Ubuntu 20.04 | aarch64 Debian   |
 | ------- | -------------------- | --------------------- | -------------------- | -------------------- | ---------------- |
@@ -32,21 +34,18 @@ WORK_DIR=$(pwd)
 After pulling the source (see below), the folder structure looks like below:
 ```
 .
-├── docker
-│   ├── Dockerfile-arm64v8-ubuntu18-py36-gcc9
-│   ├── Dockerfile-arm64v8-ubuntu20-py38-gcc9
-│   ├── docker_build.sh
-│   ├── docker_run.sh
-│   ├── entrypoint.sh
-│   └── setup_proxy.sh
 ├── docs
 │   ├── dlrt_build_qemu.svg
 │   └── target_docker.svg
-├── onnxruntime_              # ONNX-RT source folder
+├── onnxruntime               # ONNX-RT source folder
 ├── tensorflow                # Tensorflow source folder
 ├── patches
 │   ├── onnxrt
 │   └── tflite
+├── docker_build.sh
+├── docker_run.sh
+├── entrypoint.sh
+├── setup_proxy.sh
 ├── README.md
 ├── qemu_init.sh
 ├── onnxrt_build.sh
@@ -73,7 +72,6 @@ To initialize the QENU,
 
 ### Build Docker Image for Building
 ```
-cd docker
 ./docker_build.sh
 ```
 
@@ -82,8 +80,8 @@ cd docker
 It will take several minutes building the Docker image. After "`docker build`" completed, you can check the resulting docker image:
 ```
 $ docker images
-REPOSITORY                   TAG         IMAGE ID       CREATED             SIZE
-arm64v8-ubuntu18-py36-gcc9   latest      6f545823db99   36 seconds ago      768MB
+REPOSITORY            TAG                    IMAGE ID       CREATED             SIZE
+dlrt-builder-9.2.0    arm64-ubuntu22.04      6f545823db99   36 seconds ago      840MB
 ```
 
 <!-- ======================================= -->
@@ -92,46 +90,48 @@ arm64v8-ubuntu18-py36-gcc9   latest      6f545823db99   36 seconds ago      768M
 ### Prepare the Source, Update Config
 
 Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `onnxruntime/cmake/external/protoc`. Currently it is set:
-`PROTOBUF_VER=3.11.3`.
+`PROTOBUF_VER=3.20.2`.
 
 
 You can run the following in the Ubuntu PC command-line for downloading source from git repo, applying patches, and downloading pre-built `protobuf`:
-```
+```bash
 cd $WORK_DIR
 ./onnxrt_prepare.sh
 ```
 
+Note: When using AM69A as build machine and facing issues downloading the prebuilt protobuf, the same can be run inside the container.
+
 ### Build
 Update `PROTOBUF_VER` to match to the setting in `onnxrt_prepare.sh`. The following should be run in the Docker container with QEMU.
-```
-cd $WORK_DIR/docker
+```bash
+cd $WORK_DIR
 ./docker_run.sh
 ```
 
 (Optional) To build `protobuf` from source, run the following inside the container.
-```
+```bash
 ./onnxrt_protobuf_build.sh
 ```
 
 Update "`--path_to_protoc_exe`" in `onnxrt_build.sh` accordingly. To build ONNX-RT, run the following inside the container,
-```
+```bash
 ./onnxrt_build.sh
 ```
 
 Outputs:
-- Shared lib: `<onnxruntime>/build/Linux/Release/libonnxruntime.so.1.7.0`
-- Wheel file: `<onnxruntime>/build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl`
+- Shared lib: `<onnxruntime>/build/Linux/Release/libonnxruntime.so.1.14.0`
+- Wheel file: `<onnxruntime>/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp36-cp36m-linux_aarch64.whl`
 
 
 ### Package
 To package the resulting `.so` and  `.whl` files and header files, you can use the following script:
-```
+```bash
 cd $WORK_DIR
 ./onnxrt_package.sh
 ```
 
 Packaging structure:
-```
+```bash
 $ tree onnxruntime-aarch64-ubuntu18.04 -L 4
 onnxruntime-aarch64-ubuntu18.04
 ├── include
@@ -144,8 +144,8 @@ onnxruntime-aarch64-ubuntu18.04
 │           ├── platform
 │           ├── providers
 │           └── session
-├── libonnxruntime.so.1.7.0
-└── onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl
+├── libonnxruntime.so.1.14.0
+└── onnxruntime_tidl-1.14.0-cp36-cp36m-linux_aarch64.whl
 ```
 
 <!-- ======================================= -->

@@ -1,8 +1,8 @@
 #! /bin/bash
 # This script should be run inside the CONTAINER
 # Outputs:
-# - onnxruntime/build/Linux/Release/libonnxruntime.so.1.7.0
-# - onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.7.0-cp36-cp36m-linux_aarch64.whl
+# - onnxruntime/build/Linux/Release/libonnxruntime.so.1.14.0
+# - onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp38-cp38-linux_aarch64.whl
 
 # protobuf options:
 # a) in case of building protobuf from source
@@ -11,11 +11,15 @@
 #    --path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
 #    update PROTOBUF_VER as in onnxrt_prepare.sh
 
+current_dir=$(pwd)
+
+cd $WORK_DIR/workarea/onnxruntime
+
 # update how many CPUs to use
-NPROC=8
-PROTOBUF_VER=3.11.3
-cd onnxruntime
+NPROC=7
+PROTOBUF_VER=3.20.2
 ./build.sh --parallel $NPROC \
+--compile_no_warning_as_error \
 --skip_tests \
 --enable_onnx_tests \
 --build_shared_lib \
@@ -24,4 +28,5 @@ cd onnxruntime
 --path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
 --use_tidl \
 --build_wheel
-cd -
+
+cd $current_dir

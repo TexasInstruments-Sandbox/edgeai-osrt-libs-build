@@ -30,25 +30,19 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-DOCKERTAG=arm64v8-ubuntu18-py36-gcc9
+set -e
 
-if [ "$#" -lt 1 ]; then
-    CMD=/bin/bash
-else
-    CMD="$@"
-fi
+# setup proxy as required
+source /root/setup_proxy.sh
 
-# Modify the server and proxy URLs as requied
-ping bitbucket.itg.ti.com -c 1 > /dev/null 2>&1
-if [ "$?" -eq "0" ]; then
-    USE_PROXY=1
-else
-    USE_PROXY=0
-fi
+# arch
+echo "`arch`"
 
-docker run -it --rm \
-    -v $(pwd)/..:/root/dlrt-build \
-    --network host \
-    --env USE_PROXY=$USE_PROXY \
-    $DOCKERTAG \
-    $CMD
+# Ubuntu version
+UBUNTU_VER=$(lsb_release -r | cut -f2)
+echo "$BASE_IMAGE"
+
+# working dir
+cd $WORK_DIR
+
+exec "$@"

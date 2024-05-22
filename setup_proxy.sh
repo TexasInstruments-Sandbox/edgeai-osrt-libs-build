@@ -31,52 +31,37 @@
 #  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 if [ "$USE_PROXY" = "1" ]; then
+
+	# env variables
+	source ~/proxy/envs.sh
+
+	# docker proxy
+	mkdir -p ~/.docker
+	ln -snf ~/proxy/config.json ~/.docker/config.json
+
 	# apt proxy
-	if [ ! -f /etc/apt/apt.conf ]; then
-		echo "Acquire::http::proxy \"http://webproxy.ext.ti.com:80\";" > /etc/apt/apt.conf
-	fi
+	ln -snf ~/proxy/apt.conf /etc/apt/apt.conf
 
 	# wget proxy
-	if [ ! -f ~/.wgetrc ]; then
-		cat > ~/.wgetrc << EOF
-http_proxy=http://webproxy.ext.ti.com:80
-https_proxy=http://webproxy.ext.ti.com:80
-ftp_proxy=http://webproxy.ext.ti.com:80
-noproxy=ti.com
-EOF
-	fi
+	ln -snf ~/proxy/.wgetrc ~/.wgetrc
 
 	# pip3 proxy
-	if [ ! -f ~/.config/pip/pip.conf ]; then
-		mkdir -p ~/.config/pip/
-		cat > ~/.config/pip/pip.conf << EOF
-[global]
-proxy = http://webproxy.ext.ti.com
-EOF
-	fi
+	mkdir -p ~/.config/pip/
+	ln -snf ~/proxy/pip.conf ~/.config/pip/pip.conf
 
-	#git proxy
-	cat << END >> ~/.gitconfig
-[core]
-        gitproxy = none for ti.com
-        gitproxy = /home/$USER/git-proxy.sh
-[http]
-        proxy = http://webproxy.ext.ti.com:80
-[https]
-        proxy = http://webproxy.ext.ti.com:80
-END
+	# git proxy
+   	ln -snf ~/proxy/.gitconfig ~/.gitconfig
+	ln -snf ~/proxy/git-proxy.sh ~/git-proxy.sh
 
-   cat << END >> ~/git-proxy.sh
-#!/bin/sh
-exec /usr/bin/corkscrew webproxy.ext.ti.com 80 $*
-END
-
-   chmod +x ~/git-proxy.sh
+	# curl proxy
+	ln -snf ~/proxy/.curlrc ~/.curlrc
 
 else
+	unset http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY noproxy
+	rm -rf ~/.docker/config.json
 	rm -rf /etc/apt/apt.conf
 	rm -rf ~/.wgetrc
 	rm -rf ~/.config/pip/pip.conf
 	rm -rf ~/.gitconfig ~/git-proxy.sh
+	rm -rf ~/.curlrc
 fi
-
