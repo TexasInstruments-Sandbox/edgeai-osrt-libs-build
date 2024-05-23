@@ -15,6 +15,8 @@ current_dir=$(pwd)
 
 cd $WORK_DIR/workarea/onnxruntime
 
+SECONDS=0
+
 # update how many CPUs to use
 NPROC=7
 PROTOBUF_VER=3.20.2
@@ -28,5 +30,9 @@ PROTOBUF_VER=3.20.2
 --path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
 --use_tidl \
 --build_wheel
+
+echo "onnxrt_build.sh: Completed!"
+duration=$SECONDS
+echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 
 cd $current_dir

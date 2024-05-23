@@ -17,7 +17,7 @@ git submodule update --init --recursive
 # update tool.cmake
 # TODO: eleminate this step. Instead pass env variables.
 mv tool.cmake tool.cmake_ORG
-cp ../../patches/onnxrt/tool.cmake .
+cp ../../patches/onnxruntime/tool.cmake .
 
 # pre-built protobuf
 # update PROTOBUF_VER by, e.g., "git log" at <onnxruntime>/cmake/external/protobuf

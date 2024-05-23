@@ -6,6 +6,8 @@ current_dir=$(pwd)
 
 cd $WORK_DIR/workarea/tensorflow
 
+SECONDS=0
+
 rm -rf tflite_build
 mkdir tflite_build
 cd tflite_build
@@ -22,5 +24,9 @@ cmake -DCMAKE_C_COMPILER=gcc \
 
 NPROC=7
 cmake --build . -j$NPROC
+
+echo "tflite_build.sh: Completed!"
+duration=$SECONDS
+echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 
 cd $current_dir
