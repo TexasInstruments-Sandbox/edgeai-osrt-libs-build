@@ -12,13 +12,13 @@
 #    update PROTOBUF_VER as in onnxrt_prepare.sh
 
 current_dir=$(pwd)
+NPROC=7
 
 cd $WORK_DIR/workarea/onnxruntime
 
 SECONDS=0
 
 # update how many CPUs to use
-NPROC=7
 PROTOBUF_VER=3.20.2
 ./build.sh --parallel $NPROC \
 --compile_no_warning_as_error \

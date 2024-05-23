@@ -3,6 +3,7 @@
 # Output: <tensorflow_path>/tensorflow/tflite_build/libtensorflow-lite.a
 
 current_dir=$(pwd)
+NPROC=7
 
 cd $WORK_DIR/workarea/tensorflow
 
@@ -22,7 +23,6 @@ cmake -DCMAKE_C_COMPILER=gcc \
 -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
 ../tensorflow/lite/
 
-NPROC=7
 cmake --build . -j$NPROC
 
 echo "tflite_build.sh: Completed!"
