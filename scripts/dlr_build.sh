@@ -16,9 +16,6 @@ cmake -DUSE_TIDL=ON -DUSE_TIDL_RT_PATH=$(readlink -f ../../arm-tidl/rt) \
 
 make clean
 make -j$NPROC
-cd ../python/
-python3 ./setup.py bdist_wheel
-ls dist
 
 echo "dlr_build.sh: Completed!"
 duration=$SECONDS

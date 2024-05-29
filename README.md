@@ -1,91 +1,63 @@
-QEMU-based DL Runtime Build for J7 Target Docker Containers
-===========================================================
+Open-Source Runtime Library Build in Target Docker Container
+============================================================
 
-## Related Jira Tickets
-* https://jira.itg.ti.com/browse/JACINTOREQ-1557
-* https://jira.itg.ti.com/browse/ADASVISION-4967
+This build system covers building *ONNX-RT*, *FTLite-RT*, and *NEO-AI-DLR* from source for Ubuntu/Debian Docker container. Tested with PSDK 9.2 release in aarch64 Ubuntu 22.04 container. For other PSDK release, patches and settings might be updated.
 
-## Overview
-Currently this covers building *ONNX-RT* and *FTLite-RT* from source for Ubuntu 22.04 (tested) Docker containers, but it should be straightforward to extend to other DL-RT like TVM-DLR. This is for PSDK 9.2 release. For other release, patches and settings should be updated accordingly.
+Supported use cases include:
 
-### DL Runtime Library Packages
+- **Case 1**: Compiling with the native GCC in arm64v8 Ubuntu Docker container directly on aarch64 build machine
+- **Case 2**: Compiling with the native GCC in arm64v8 Ubuntu Docker container on x86_64 machine using QEMU
 
-TODO: update the table
-
-|         | x86_64 Ubuntu 18.04  | aarch64 J7 PSDK-Linux | aarch64 Ubuntu 18.04 | aarch64 Ubuntu 20.04 | aarch64 Debian   |
-| ------- | -------------------- | --------------------- | -------------------- | -------------------- | ---------------- |
-| DLR     | .whl from TIDL build | .ipk from Ycoto build | Not yet covered      | Not yet covered      | Not yet covered  |
-| ONNX-RT | .whl from TIDL build | .ipk from Ycoto build | .so & .whl from This | .so & .whl from This | Not yet covered  |
-| TFL-RT  | .whl from TIDL build | .ipk from Ycoto build | .a from This         | .a from This         | Not yet covered  |
-
-### Build DL Runtime using QEMU on PC
+<!-- ### Build DL Runtime using QEMU on PC
 ![](docs/dlrt_build_qemu.svg)
 
 ### Build & Run Apps in Target Docker Container: To be covered in Edge AI / Robotics SDK
-![](docs/target_docker.svg)
+![](docs/target_docker.svg) -->
 
-## Clone GIT repo
-```
-git clone <this_repo_url>
-cd dlrt-build
-WORK_DIR=$(pwd)
+<!-- ======================================= -->
+## Prerequisite
+
+### docker-pull the base Docker image
+
+Pull the baseline Docker image needed. Assuming outside of a proxy network,
+```bash
+docker pull arm64v8/ubuntu:22.04
+docker pull arm64v8/ubuntu:20.04
+docker pull arm64v8/debian:12.5
 ```
 
-After pulling the source (see below), the folder structure looks like below:
-```
-.
-├── docs
-│   ├── dlrt_build_qemu.svg
-│   └── target_docker.svg
-├── onnxruntime               # ONNX-RT source folder
-├── tensorflow                # Tensorflow source folder
-├── patches
-│   ├── onnxrt
-│   └── tflite
-├── docker_build.sh
-├── docker_run.sh
-├── entrypoint.sh
-├── setup_proxy.sh
-├── README.md
-├── qemu_init.sh
-├── onnxrt_build.sh
-├── onnxrt_deploy.sh
-├── onnxrt_prepare.sh
-├── onnxrt_protobuf_build.sh  # Optional
-├── tflite_build.sh
-├── tflite_deploy.sh
-└── tflite_prepare.sh
+### edgeai-ti-proxy
+
+Set up `edgeai-ti-proxy` ([repo link](https://bitbucket.itg.ti.com/projects/PROCESSOR-SDK-VISION/repos/edgeai-ti-proxy/browse))
+
+Before docker-build or docker-run, please make sure sourcing `edgeai-ti-proxy/setup_proxy.sh`, which will define the `USE_PROXY` env variable and all the proxy settings for the TI network.
+
+### (Only for Case 2) Initialize QEMU to Emulate ARM Architecture on x86 Ubuntu PC
+If QEMU was not installed on the build Ubuntu PC,
+
+```bash
+sudo apt-get install -y qemu-user-static
+# to initialize the QENU
+./qemu_init.sh
 ```
 
 ## Docker Environment for Building
 
-### Initialize QEMU to Emulate ARM Architecture on x86 Ubuntu PC
-If QEMU was not installed on the build Ubuntu PC,
-```
-sudo apt-get install -y qemu-user-static
-```
 
-To initialize the QENU,
-```
-./qemu_init.sh
-```
-
-### Build Docker Image for Building
-```
+### Docker-build
+```bash
 ./docker_build.sh
 ```
 
-**TI Proxy**: The script and Dockerfile should be also run inside TI network. All the necessary proxy setting are provided.
-
-It will take several minutes building the Docker image. After "`docker build`" completed, you can check the resulting docker image:
-```
-$ docker images
-REPOSITORY            TAG                    IMAGE ID       CREATED             SIZE
-dlrt-builder-9.2.0    arm64-ubuntu22.04      6f545823db99   36 seconds ago      840MB
+### Docker-run
+```bash
+./docker_run.sh
 ```
 
 <!-- ======================================= -->
 ## Build ONNX-RT from Source
+
+All the commends below should be run in the Docker container.
 
 ### Prepare the Source, Update Config
 
@@ -93,20 +65,14 @@ Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `
 `PROTOBUF_VER=3.20.2`.
 
 
-You can run the following in the Ubuntu PC command-line for downloading source from git repo, applying patches, and downloading pre-built `protobuf`:
+You can run the following in the Docker container for downloading source from git repo, applying patches, and downloading pre-built `protobuf`:
 ```bash
-cd $WORK_DIR
+cd scripts
 ./onnxrt_prepare.sh
 ```
 
-Note: When using AM69A as build machine and facing issues downloading the prebuilt protobuf, the same can be run inside the container.
-
 ### Build
 Update `PROTOBUF_VER` to match to the setting in `onnxrt_prepare.sh`. The following should be run in the Docker container with QEMU.
-```bash
-cd $WORK_DIR
-./docker_run.sh
-```
 
 (Optional) To build `protobuf` from source, run the following inside the container.
 ```bash
@@ -119,88 +85,70 @@ Update "`--path_to_protoc_exe`" in `onnxrt_build.sh` accordingly. To build ONNX-
 ```
 
 Outputs:
-- Shared lib: `<onnxruntime>/build/Linux/Release/libonnxruntime.so.1.14.0`
-- Wheel file: `<onnxruntime>/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp36-cp36m-linux_aarch64.whl`
-
+- Shared lib: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/libonnxruntime.so.1.14.0`
+- Wheel file: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp36-cp36m-linux_aarch64.whl`
 
 ### Package
-To package the resulting `.so` and  `.whl` files and header files, you can use the following script:
+
 ```bash
-cd $WORK_DIR
 ./onnxrt_package.sh
 ```
 
-Packaging structure:
-```bash
-$ tree onnxruntime-aarch64-ubuntu18.04 -L 4
-onnxruntime-aarch64-ubuntu18.04
-├── include
-│   └── onnxruntime
-│       └── core
-│           ├── common
-│           ├── framework
-│           ├── graph
-│           ├── optimizer
-│           ├── platform
-│           ├── providers
-│           └── session
-├── libonnxruntime.so.1.14.0
-└── onnxruntime_tidl-1.14.0-cp36-cp36m-linux_aarch64.whl
-```
+Output tarball: `$WORK_DIR/workarea/onnx-1.14.0-ubuntu22_aarch64.tar.gz`
 
 <!-- ======================================= -->
 ## Build TFLite from Source
 
+All the commends below should be run in the Docker container.
+
 ### Prepare the Source, Update config
-You can run the following script in the Ubuntu PC command-line.
-```
-cd $WORK_DIR
+
+```bash
+cd scripts
 ./tflite_prepare.sh
 ```
 
 ### Build
-To build the tensorflow from source, run the following in the Docker container with QEMU.
-```
-cd $WORK_DIR/docker
-./docker_run.sh
-```
-
-Inside the container,
-```
+```bash
 ./tflite_build.sh
 ```
 
 Outputs:
-- Static lib: `<tensorflow>/tensorflow/lite/tools/make/gen/linux_aarch64/lib/libtensorflow-lite.a`
-- Wheel file: TODO
+- Static lib: `$WORK_DIR/workarea/tensorflow/tflite_build/libtensorflow-lite.a`
+- Wheel file: `$WORK_DIR/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl`
 
 ### Package
+
 To package the resulting `.a` file and header files, you can use the following script:
 
-```
-cd $WORK_DIR
+```bash
 ./tflite_package.sh
 ```
 
-Packaging structure:
+Output tarball: `$WORK_DIR/workarea/tensorflow-2.12-ubuntu22_aarch64.tar.gz`
+
+<!-- ======================================= -->
+## Build Neo-AI-DLR from Source
+
+All the commends below should be run in the Docker container.
+
+### Prepare the Source, Update config
+
+```bash
+cd scripts
+./dlr_prepare.sh
 ```
-$ tree tensorflow-aarch64-ubuntu18.04 -L 4
-tensorflow-aarch64-ubuntu18.04
-├── include
-│   └── flatbuffers
-│       ├── base.h
-│       ├── code_generators.h
-│       ├── flatbuffers.h
-│       ├── flatc.h
-│       ├── flexbuffers.h
-│       ├── grpc.h
-│       ├── hash.h
-│       ├── idl.h
-│       ├── minireflect.h
-│       ├── reflection_generated.h
-│       ├── reflection.h
-│       ├── registry.h
-│       ├── stl_emulation.h
-│       └── util.h
-└── libtensorflow-lite.a
+
+### Build
+
+```bash
+./dlr_build.sh
 ```
+
+### Package
+
+```bash
+./dlr_package.sh
+```
+
+Output wheel package: `$WORK_DIR/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl`
