@@ -1,8 +1,14 @@
 #! /bin/bash
-# This script should be run on the host Linux (PSDK-Linux)
+# This script should be run on the host Linux / PSDK-Linux
 # after building the vision-apps (in a seperate build system) and the OS-RT libs
+set -e
 
-TARGET_DIR=/opt/ubuntu22-libs
+if [ -f /.dockerenv ]; then
+    echo "You're inside a Docker container. This script should be run on the host Linux / PSDK-Linux"
+    exit 1
+fi
+
+TARGET_DIR=$HOME/ubuntu22-deps
 
 rm -rf $TARGET_DIR
 mkdir -p $TARGET_DIR
