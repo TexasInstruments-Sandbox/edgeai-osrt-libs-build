@@ -5,7 +5,7 @@ current_dir=$(pwd)
 cd $WORK_DIR/workarea
 
 ## package into a tarball
-DST_DIR=$WORK_DIR/workarea/tensorflow-2.12-ubuntu22_aarch64
+DST_DIR=$WORK_DIR/workarea/tflite-2.12-ubuntu22_aarch64
 LIB_DIR=$WORK_DIR/workarea/tensorflow/tflite_build/
 TARBALL=$DST_DIR.tar.gz
 

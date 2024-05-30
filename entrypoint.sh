@@ -43,6 +43,6 @@ UBUNTU_VER=$(lsb_release -r | cut -f2)
 echo "$BASE_IMAGE"
 
 # working dir
-cd $WORK_DIR
+cd $WORK_DIR/scripts
 
 exec "$@"

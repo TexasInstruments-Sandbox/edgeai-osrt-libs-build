@@ -43,7 +43,6 @@ sudo apt-get install -y qemu-user-static
 
 ## Docker Environment for Building
 
-
 ### Docker-build
 ```bash
 BASE_IMAGE=ubuntu:22.04 ./docker_build.sh
@@ -57,9 +56,9 @@ BASE_IMAGE=ubuntu:22.04 ./docker_run.sh
 <!-- ======================================= -->
 ## Build ONNX-RT from Source
 
-All the commends below should be run in the Docker container.
+All the commends below should be run **in the Docker container**.
 
-### Prepare the Source, Update Config
+### Prepare the source and update the build config
 
 Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `onnxruntime/cmake/external/protoc`. Currently it is set:
 `PROTOBUF_VER=3.20.2`.
@@ -67,7 +66,6 @@ Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `
 
 You can run the following in the Docker container for downloading source from git repo, applying patches, and downloading pre-built `protobuf`:
 ```bash
-cd scripts
 ./onnxrt_prepare.sh
 ```
 
@@ -97,14 +95,13 @@ Outputs:
 Output tarball: `$WORK_DIR/workarea/onnx-1.14.0-ubuntu22_aarch64.tar.gz`
 
 <!-- ======================================= -->
-## Build TFLite from Source
+## Build TFLite-RT from Source
 
-All the commends below should be run in the Docker container.
+All the commends below should be run **in the Docker container**.
 
-### Prepare the Source, Update config
+### Prepare the source and update the build config
 
 ```bash
-cd scripts
 ./tflite_prepare.sh
 ```
 
@@ -125,17 +122,16 @@ To package the resulting `.a` file and header files, you can use the following s
 ./tflite_package.sh
 ```
 
-Output tarball: `$WORK_DIR/workarea/tensorflow-2.12-ubuntu22_aarch64.tar.gz`
+Output tarball: `$WORK_DIR/workarea/tflite-2.12-ubuntu22_aarch64.tar.gz`
 
 <!-- ======================================= -->
 ## Build Neo-AI-DLR from Source
 
-All the commends below should be run in the Docker container.
+All the commends below should be run **in the Docker container**.
 
-### Prepare the Source, Update config
+### Prepare the source and update the build config
 
 ```bash
-cd scripts
 ./dlr_prepare.sh
 ```
 

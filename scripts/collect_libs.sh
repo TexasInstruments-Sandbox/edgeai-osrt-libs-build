@@ -21,7 +21,7 @@ lib_files=(
     # TFLite
     # $ROOT_DIR/home/root/dlrt-build/workarea/tensorflow/tflite_build/libtensorflow-lite.a
     $ROOT_DIR/home/root/dlrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl
-    $ROOT_DIR/home/root/dlrt-build/workarea/tensorflow-2.12-ubuntu22_aarch64.tar.gz
+    $ROOT_DIR/home/root/dlrt-build/workarea/tflite-2.12-ubuntu22_aarch64.tar.gz
     # DLR
     $ROOT_DIR/home/root/dlrt-build/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl
 )
