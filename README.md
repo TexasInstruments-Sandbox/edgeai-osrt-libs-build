@@ -46,12 +46,12 @@ sudo apt-get install -y qemu-user-static
 
 ### Docker-build
 ```bash
-./docker_build.sh
+BASE_IMAGE=ubuntu:22.04 ./docker_build.sh
 ```
 
 ### Docker-run
 ```bash
-./docker_run.sh
+BASE_IMAGE=ubuntu:22.04 ./docker_run.sh
 ```
 
 <!-- ======================================= -->
