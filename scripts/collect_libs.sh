@@ -3,6 +3,8 @@
 # after building the vision-apps (in a seperate build system) and the OS-RT libs
 set -e
 
+current_dir=$(pwd)
+
 if [ -f /.dockerenv ]; then
     echo "You're inside a Docker container. This script should be run on the host Linux / PSDK-Linux"
     exit 1
@@ -38,3 +40,7 @@ done
 
 echo "collect_libs.sh: all the lib/whl files available on $TARGET_DIR"
 find $TARGET_DIR -type f
+
+cd $HOME
+tar czf ubuntu22-deps.tar.gz ubuntu22-deps
+cd $current_dir
