@@ -8,12 +8,6 @@ Supported use cases include:
 - **Case 1**: Compiling with the native GCC in arm64v8 Ubuntu Docker container directly on aarch64 build machine
 - **Case 2**: Compiling with the native GCC in arm64v8 Ubuntu Docker container on x86_64 machine using QEMU
 
-<!-- ### Build DL Runtime using QEMU on PC
-![](docs/dlrt_build_qemu.svg)
-
-### Build & Run Apps in Target Docker Container: To be covered in Edge AI / Robotics SDK
-![](docs/target_docker.svg) -->
-
 <!-- ======================================= -->
 ## Prerequisite
 
@@ -26,7 +20,7 @@ docker pull arm64v8/ubuntu:20.04
 docker pull arm64v8/debian:12.5
 ```
 
-### edgeai-ti-proxy
+### edgeai-ti-proxy (only required to make the build system work in TI proxy network)
 
 Set up `edgeai-ti-proxy` ([repo link](https://bitbucket.itg.ti.com/projects/PROCESSOR-SDK-VISION/repos/edgeai-ti-proxy/browse))
 

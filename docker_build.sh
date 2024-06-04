@@ -40,7 +40,7 @@ ARCH=arm64
 : "${SDK_VER:=9.2.0}"
 
 # docker tag
-DOCKER_TAG=dlrt-builder-${SDK_VER}:${ARCH}-${BASE_IMAGE//:/}
+DOCKER_TAG=osrt-builder:${SDK_VER}-${ARCH}-${BASE_IMAGE//:/}
 echo "DOCKER_TAG = $DOCKER_TAG"
 
 if [ "$ARCH" == "arm64" ]; then
