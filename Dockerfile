@@ -48,6 +48,7 @@ ENV https_proxy=${HTTP_PROXY}
 #=========================================================================
 FROM base-${USE_PROXY}
 ARG ARCH
+ARG BASE_IMAGE
 ARG DEBIAN_FRONTEND
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
