@@ -24,7 +24,7 @@ cp ../../patches/onnxruntime/tool.cmake .
 PROTOBUF_VER=3.20.2
 ZIP_FILE=protoc-${PROTOBUF_VER}-linux-aarch_64.zip
 cd $WORK_DIR/workarea
-curl -O https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/${ZIP_FILE}
+curl -O -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/${ZIP_FILE}
 unzip ${ZIP_FILE} -d onnxruntime/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64
 rm ${ZIP_FILE}
 
