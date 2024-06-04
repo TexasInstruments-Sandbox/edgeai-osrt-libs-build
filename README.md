@@ -8,6 +8,10 @@ Supported use cases include:
 - **Case 1**: Compiling with the native GCC in arm64v8 Ubuntu Docker container directly on aarch64 build machine
 - **Case 2**: Compiling with the native GCC in arm64v8 Ubuntu Docker container on x86_64 machine using QEMU
 
+<br />
+<img src="docs/build_in_aarch64_container.png" width="383" />
+<figcaption>Figure 1. Building in aarch64 Ubuntu/Debian Container</figcaption>
+
 <!-- ======================================= -->
 ## Prerequisite
 
