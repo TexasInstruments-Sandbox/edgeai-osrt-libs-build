@@ -5,12 +5,14 @@ current_dir=$(pwd)
 cd $WORK_DIR/workarea
 
 ## package into a tarball
-DST_DIR=tflite-2.12-ubuntu22_aarch64
+: "${TF_VER:=2.12}"
+PKG_DIST=${BASE_IMAGE//:/}
+DST_DIR=tflite-${TF_VER}-${PKG_DIST}_aarch64
 LIB_DIR=tensorflow/tflite_build
 TARBALL=$DST_DIR.tar.gz
 
 rm -rf $DST_DIR
-mkdir -p $DST_DIR/tflite_2.12
+mkdir -p $DST_DIR/tflite_${TF_VER}
 mkdir -p $DST_DIR/tensorflow/third_party
 mkdir -p $DST_DIR/tensorflow/tensorflow/lite
 
@@ -23,7 +25,7 @@ cp $LIB_DIR/libtensorflow-lite.a $DST_DIR
 
 # make each package folder flat
 cd $WORK_DIR/workarea
-for dir in $DST_DIR/tflite_2.12/*; do
+for dir in $DST_DIR/tflite_${TF_VER}/*; do
     if [ -d "$dir" ]; then
         cd "$dir"
         find . -name "*.a" -exec mv {} . \;

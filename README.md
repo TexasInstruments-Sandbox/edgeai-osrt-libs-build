@@ -1,7 +1,7 @@
 Open-Source Runtime Library Build in Target Docker Container
 ============================================================
 
-This build system covers building *ONNX-RT*, *FTLite-RT*, and *NEO-AI-DLR* from source for Ubuntu/Debian Docker container. Tested with PSDK 9.2 release in aarch64 Ubuntu 22.04 container. For other PSDK release, patches and settings might be updated.
+This build system covers building *ONNX-RT*, *FTLite-RT*, and *NEO-AI-DLR* from source for Ubuntu/Debian Docker container. Tested with PSDK 9.2 release in aarch64 Ubuntu 22.04 and aarch64 Debian 12.5 containers. For other PSDK release, patches and settings might be updated.
 
 Supported use cases include:
 
@@ -49,11 +49,15 @@ sudo apt-get install -y qemu-user-static
 ### Docker-build
 ```bash
 BASE_IMAGE=ubuntu:22.04 ./docker_build.sh
+BASE_IMAGE=ubuntu:20.04 ./docker_build.sh
+BASE_IMAGE=debian:12.5  ./docker_build.sh
 ```
 
 ### Docker-run
 ```bash
 BASE_IMAGE=ubuntu:22.04 ./docker_run.sh
+BASE_IMAGE=ubuntu:20.04 ./docker_run.sh
+BASE_IMAGE=debian:12.5  ./docker_run.sh
 ```
 
 <!-- ======================================= -->
@@ -95,7 +99,7 @@ Outputs:
 ./onnxrt_package.sh
 ```
 
-Output tarball: `$WORK_DIR/workarea/onnx-1.14.0-ubuntu22_aarch64.tar.gz`
+Output tarball: `$WORK_DIR/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz`
 
 <!-- ======================================= -->
 ## Build TFLite-RT from Source
@@ -130,7 +134,7 @@ To package the resulting `.a` file and header files, you can use the following s
 ./tflite_package.sh
 ```
 
-Output tarball: `$WORK_DIR/workarea/tflite-2.12-ubuntu22_aarch64.tar.gz`
+Output tarball: `$WORK_DIR/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz`
 
 <!-- ======================================= -->
 ## Build Neo-AI-DLR from Source

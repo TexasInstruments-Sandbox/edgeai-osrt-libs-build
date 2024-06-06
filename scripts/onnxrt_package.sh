@@ -5,7 +5,9 @@ current_dir=$(pwd)
 cd $WORK_DIR/workarea
 
 ## package into a tarball
-DST_DIR=onnx-1.14.0-ubuntu22_aarch64
+: "${ONNX_VER:=1.14.0}"
+PKG_DIST=${BASE_IMAGE//:/}
+DST_DIR=onnx-${ONNX_VER}-${PKG_DIST}_aarch64
 LIB_DIR=onnxruntime/build/Linux/Release
 TARBALL=$DST_DIR.tar.gz
 
@@ -13,7 +15,7 @@ rm -rf $DST_DIR
 mkdir -p $DST_DIR/onnxruntime
 
 # package .so
-cp $LIB_DIR/libonnxruntime.so.1.14.0 $DST_DIR
+cp $LIB_DIR/libonnxruntime.so.${ONNX_VER} $DST_DIR
 
 # package header files in an entire nested directory keeping the same hierarchy
 # TODO: package only necessary header files for ONNX-RT
