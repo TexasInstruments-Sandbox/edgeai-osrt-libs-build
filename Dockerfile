@@ -70,18 +70,31 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # python packages
+# workaround for debian: add --break-system-packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	libopenblas-dev \
     python3-dev \
     python3-pip \
     python3-setuptools && \
-    python3 -m pip install --upgrade pip && \
-    python3 -m pip install numpy setuptools wheel pybind11 pytest && \
+    if echo ${BASE_IMAGE} | grep -q "debian" ; then \
+        python3 -m pip install --upgrade --break-system-packages pip; \
+    else \
+        python3 -m pip install --upgrade pip; \
+    fi && \
+    if echo ${BASE_IMAGE} | grep -q "debian" ; then \
+        python3 -m pip install --break-system-packages numpy setuptools wheel pybind11 pytest; \
+    else \
+        python3 -m pip install numpy setuptools wheel pybind11 pytest; \
+    fi && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # cmake >= 3.24
 RUN apt-get remove cmake -y && \
-    python3 -m pip install --upgrade cmake && \
+    if echo ${BASE_IMAGE} | grep -q "debian" ; then \
+        python3 -m pip install --upgrade --break-system-packages cmake; \
+    else \
+        python3 -m pip install --upgrade cmake; \
+    fi && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # ONNX-RT build dependencies
