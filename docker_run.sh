@@ -50,9 +50,9 @@ else
 fi
 
 docker run -it --rm \
-    -v ${PWD}/scripts:/root/dlrt-build/scripts \
-    -v ${PWD}/patches:/root/dlrt-build/patches \
-    -v ${PWD}/workarea:/root/dlrt-build/workarea \
+    -v ${PWD}/scripts:/root/osrt-build/scripts \
+    -v ${PWD}/patches:/root/osrt-build/patches \
+    -v ${PWD}/workarea:/root/osrt-build/workarea \
     --privileged \
     --network host \
     --env USE_PROXY=$USE_PROXY \

@@ -120,7 +120,7 @@ RUN echo "if [ -n \"$BASH_VERSION\" ]; then"     >  .profile && \
 # add label
 LABEL TI_IMAGE_SOURCE=${BASE_IMAGE}
 
-ENV WORK_DIR=/root/dlrt-build
+ENV WORK_DIR=/root/osrt-build
 WORKDIR $WORK_DIR
 
 # setup entrypoint
