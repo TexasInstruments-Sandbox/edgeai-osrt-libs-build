@@ -11,6 +11,8 @@
 #    --path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
 #    update PROTOBUF_VER as in onnxrt_prepare.sh
 
+set -e
+
 current_dir=$(pwd)
 NPROC=7
 

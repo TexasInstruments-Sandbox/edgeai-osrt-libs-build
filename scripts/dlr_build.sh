@@ -1,6 +1,8 @@
 #! /bin/bash
 # This script should be run inside the CONTAINER
 
+set -e
+
 current_dir=$(pwd)
 NPROC=7
 

@@ -76,12 +76,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     python3-pip \
     python3-setuptools && \
-    if echo ${BASE_IMAGE} | grep -q "debian" ; then \
+    if echo ${BASE_IMAGE} | grep -q "debian" || echo ${BASE_IMAGE} | grep -q "ubuntu:24.04"; then \
         python3 -m pip install --upgrade --break-system-packages pip; \
     else \
         python3 -m pip install --upgrade pip; \
     fi && \
-    if echo ${BASE_IMAGE} | grep -q "debian" ; then \
+    if echo ${BASE_IMAGE} | grep -q "debian" || echo ${BASE_IMAGE} | grep -q "ubuntu:24.04"; then \
         python3 -m pip install --break-system-packages numpy setuptools wheel pybind11 pytest; \
     else \
         python3 -m pip install numpy setuptools wheel pybind11 pytest; \
@@ -90,7 +90,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # cmake >= 3.24
 RUN apt-get remove cmake -y && \
-    if echo ${BASE_IMAGE} | grep -q "debian" ; then \
+    if echo ${BASE_IMAGE} | grep -q "debian" || echo ${BASE_IMAGE} | grep -q "ubuntu:24.04"; then \
         python3 -m pip install --upgrade --break-system-packages cmake; \
     else \
         python3 -m pip install --upgrade cmake; \
