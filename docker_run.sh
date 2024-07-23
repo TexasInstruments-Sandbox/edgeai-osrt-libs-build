@@ -37,7 +37,7 @@ ARCH=arm64
 : "${BASE_IMAGE:=ubuntu:22.04}"
 
 # SDK version
-: "${SDK_VER:=9.2.0}"
+: "${SDK_VER:=10.0.0}"
 
 # docker tag
 DOCKER_TAG=osrt-builder:${SDK_VER}-${ARCH}-${BASE_IMAGE//:/}

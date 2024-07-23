@@ -3,7 +3,7 @@ current_dir=$(pwd)
 
 # git clone
 REPO_BRANCH="tidl-1.14"
-REPO_TAG="200f0950fcf0c13e1df132c6cf59534a3121aba5"
+REPO_TAG="91ce063f122df85e5caa408c3961b8167b25c2e4"
 cd $WORK_DIR/workarea
 git clone https://github.com/TexasInstruments/onnxruntime.git --branch $REPO_BRANCH --single-branch onnxruntime
 cd onnxruntime

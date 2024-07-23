@@ -39,7 +39,7 @@ ARCH=arm64
 : "${BASE_IMAGE:=ubuntu:22.04}"
 
 # SDK version
-: "${SDK_VER:=9.2.0}"
+: "${SDK_VER:=10.0.0}"
 
 # docker tag
 DOCKER_TAG=osrt-builder:${SDK_VER}-${ARCH}-${BASE_IMAGE//:/}
@@ -73,13 +73,12 @@ fi
 
 # docker-build
 SECONDS=0
-DOCKER_BUILDKIT=1 docker build \
+docker build \
     -t $DOCKER_TAG \
     --build-arg ARCH=$ARCH \
     --build-arg BASE_IMAGE=$BASE_IMAGE \
     --build-arg USE_PROXY=$USE_PROXY \
     --build-arg HTTP_PROXY=$HTTP_PROXY \
-    --progress=plain \
     -f Dockerfile $DST_DIR
 echo "Docker build -t $DOCKER_TAG completed!"
 duration=$SECONDS
