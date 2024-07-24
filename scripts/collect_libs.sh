@@ -1,7 +1,7 @@
 #! /bin/bash
 # This script should be run on the host Linux / PSDK-Linux
-# after building the vision-apps (in a seperate build system) and the OS-RT libs
-# below is example for j784s4 and ubuntu:22.04
+# after building the vision-apps (in a seperate build system) as well as the OS-RT libs
+# below is for ubuntu:22.04
 set -e
 
 current_dir=$(pwd)
@@ -20,24 +20,48 @@ mkdir -p $TARGET_DIR
 ROOT_DIR=
 
 lib_files=(
-    # Vision-apps
-    $ROOT_DIR/home/root/vision-apps-build/workarea/vision_apps/out/J784S4/A72/LINUX/release/libti-vision-apps-j784s4_9.2.0-ubuntu22.04.deb
+    # Vision-apps libs for all the platforms
+    $ROOT_DIR/root/vision-apps-build/workarea/vision_apps/out/J784S4/A72/LINUX/release/libti-vision-apps-j784s4_10.0.0-ubuntu22.04.deb
+    $ROOT_DIR/root/vision-apps-build/workarea/vision_apps/out/J721S2/A72/LINUX/release/libti-vision-apps-j721s2_10.0.0-ubuntu22.04.deb
+    $ROOT_DIR/root/vision-apps-build/workarea/vision_apps/out/J721E/A72/LINUX/release/libti-vision-apps-j721e_10.0.0-ubuntu22.04.deb
+    $ROOT_DIR/root/vision-apps-build/workarea/vision_apps/out/J722S/A53/LINUX/release/libti-vision-apps-j722s_10.0.0-ubuntu22.04.deb
+    $ROOT_DIR/root/vision-apps-build/workarea/vision_apps/out/AM62A/A53/LINUX/release/libti-vision-apps-am62a_10.0.0-ubuntu22.04.deb
     # ONNX
-    $ROOT_DIR/home/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl
-    $ROOT_DIR/home/root/osrt-build/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz
+    $ROOT_DIR/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl
+    $ROOT_DIR/root/osrt-build/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz
     # TFLite
-    $ROOT_DIR/home/root/osrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl
-    $ROOT_DIR/home/root/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz
+    $ROOT_DIR/root/osrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl
+    $ROOT_DIR/root/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz
     # DLR
-    $ROOT_DIR/home/root/osrt-build/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl
-    # TIDL runtime modules
-    $ROOT_DIR/home/root/osrt-build/workarea/arm-tidl/rt/out/J784S4/A72/LINUX/release/libvx_tidl_rt.so.1.0
-    $ROOT_DIR/home/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    $ROOT_DIR/home/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl
+    # TIDL runtime modules: J784S4
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J784S4/A72/LINUX/release/libvx_tidl_rt.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    # TIDL runtime modules: J721S2
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J721S2/A72/LINUX/release/libvx_tidl_rt.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721S2/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721S2/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    # TIDL runtime modules: J721E
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J721E/A72/LINUX/release/libvx_tidl_rt.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721E/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721E/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    # TIDL runtime modules: J722S
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J722S/A53/LINUX/release/libvx_tidl_rt.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J722S/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J722S/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    # TIDL runtime modules: AM62A
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/AM62A/A53/LINUX/release/libvx_tidl_rt.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/AM62A/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/AM62A/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
 )
 
 for lib_file in "${lib_files[@]}"; do
-    cp "$lib_file" "$TARGET_DIR"
+    if [ -f "$lib_file" ]; then
+        cp "$lib_file" "$TARGET_DIR"
+    else
+        echo "File $lib_file does not exist."
+    fi
 done
 
 echo "collect_libs.sh: all the lib/whl files available on $TARGET_DIR"
