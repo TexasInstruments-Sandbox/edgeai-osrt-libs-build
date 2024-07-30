@@ -2,12 +2,11 @@
 current_dir=$(pwd)
 
 # git clone
-REPO_BRANCH="tidl-1.14"
-REPO_TAG="91ce063f122df85e5caa408c3961b8167b25c2e4"
+# REPO_BRANCH="tidl-1.14"
+REPO_TAG="REL.TIDL.10.00.00.03" # SHA: 696c7c5074c28b27a8d1d6b70c45eb02bfcea4e5
 cd $WORK_DIR/workarea
-git clone https://github.com/TexasInstruments/onnxruntime.git --branch $REPO_BRANCH --single-branch onnxruntime
+git clone https://github.com/TexasInstruments/onnxruntime.git --branch $REPO_TAG --depth 1 --single-branch onnxruntime
 cd onnxruntime
-git checkout $REPO_TAG
 
 # TODO: it looks like this is part of build.sh, but maybe required to build protobuf
 # Q: is "build protobuf" part of build.sh?

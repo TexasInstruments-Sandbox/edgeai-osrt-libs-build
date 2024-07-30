@@ -2,12 +2,12 @@
 current_dir=$(pwd)
 
 # git clone
-REPO_BRANCH="tidl-j7-2.12-latest"
-REPO_TAG="a5870206f0c6addcb327b6095baab16639c1bd5c"
+# REPO_BRANCH="tidl-j7-2.12"
+REPO_TAG="REL.TIDL.10.00.00.03" # SHA: 422156a973b23bab6b86176a245a66193dccb995
+
 cd $WORK_DIR/workarea
-git clone https://github.com/TexasInstruments/tensorflow.git --branch $REPO_BRANCH --single-branch tensorflow
+git clone https://github.com/TexasInstruments/tensorflow.git --branch $REPO_TAG --depth 1 --single-branch tensorflow
 cd tensorflow
-git checkout $REPO_TAG
 
 # define a function to copy a file and backup the original if it exists
 copy_and_backup() {
