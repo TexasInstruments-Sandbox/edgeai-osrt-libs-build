@@ -58,4 +58,5 @@ docker run -it --rm \
     --env USE_PROXY=$USE_PROXY \
     --env ARCH=$ARCH \
     --env BASE_IMAGE=$BASE_IMAGE \
-      $DOCKER_TAG $CMD
+    --env SDK_VER=$SDK_VER \
+    $DOCKER_TAG $CMD

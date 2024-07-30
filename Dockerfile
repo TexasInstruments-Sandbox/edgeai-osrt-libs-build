@@ -102,6 +102,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xorg-server-source libtool automake && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# build and install ti-rpmsg-char: update the tag info in each release
+WORKDIR /opt
+RUN git clone git://git.ti.com/rpmsg/ti-rpmsg-char.git --branch 0.6.6 --depth 1 --single-branch && \
+    cd /opt/ti-rpmsg-char && \
+    autoreconf -i && ./configure --host=aarch64-none-linux-gnu --prefix=/usr && \
+    make && make install && \
+    rm -rf /opt/ti-rpmsg-char
+
+# install libGLESv2, libEGL, libgbm-dev, libglm-dev, libdrm-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgles2-mesa-dev \
+    libegl-dev \
+    libgbm-dev \
+    libglm-dev \
+    libdrm-dev && \
+    rm -rf /var/lib/apt/lists/*
+
 #=========================================================================
 # add scripts
 COPY entrypoint.sh /root/entrypoint.sh
