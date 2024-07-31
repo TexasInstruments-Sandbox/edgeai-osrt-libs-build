@@ -1,4 +1,4 @@
-#  Copyright (C) 2021 Texas Instruments Incorporated - http://www.ti.com/
+#  Copyright (C) 2024 Texas Instruments Incorporated - http://www.ti.com/
 #
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions
@@ -104,7 +104,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # build and install ti-rpmsg-char: update the tag info in each release
 WORKDIR /opt
-RUN git clone git://git.ti.com/rpmsg/ti-rpmsg-char.git --branch 0.6.6 --depth 1 --single-branch && \
+RUN git clone git://git.ti.com/rpmsg/ti-rpmsg-char.git --branch 0.6.7 --depth 1 --single-branch && \
     cd /opt/ti-rpmsg-char && \
     autoreconf -i && ./configure --host=aarch64-none-linux-gnu --prefix=/usr && \
     make && make install && \

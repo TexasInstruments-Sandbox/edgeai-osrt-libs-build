@@ -8,7 +8,7 @@ current_dir=$(pwd)
 cd ${WORK_DIR}/workarea
 
 # clone concerto
-REPO_TAG=REL.PSDK.ANALYTICS.09.02.00.05
+REPO_TAG=REL.PSDK.ANALYTICS.10.00.00.02 # SHA: 38b9190a5d335e58d81d21e3e058b11e5c47c605
 REPO_DIR="${WORK_DIR}/workarea/concerto"
 if [ ! -d "$REPO_DIR" ]; then
     git clone https://git.ti.com/git/processor-sdk/concerto.git --branch $REPO_TAG --depth 1 --single-branch
