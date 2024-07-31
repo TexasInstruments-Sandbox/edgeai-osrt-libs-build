@@ -126,7 +126,7 @@ Outputs:
 - Static lib: `$WORK_DIR/workarea/tensorflow/tflite_build/libtensorflow-lite.a`
 - Wheel file: `$WORK_DIR/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl`
 
-### Package_CORE
+### Package
 ```bash
 ./tflite_package.sh
 ```
