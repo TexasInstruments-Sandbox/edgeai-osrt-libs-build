@@ -64,7 +64,7 @@ echo "USE_PROXY = $USE_PROXY"
 DST_DIR=.
 mkdir -p $DST_DIR/proxy
 PROXY_DIR=$HOME/proxy
-if [ "`arch`" == "aarch64" ]; then
+if [[ "$(arch)" == "aarch64" && "$(whoami)" == "root" ]]; then
     PROXY_DIR=/opt/proxy
 fi
 if [ -d "$PROXY_DIR" ]; then
