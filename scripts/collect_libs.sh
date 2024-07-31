@@ -26,26 +26,6 @@ lib_files=(
     $ROOT_DIR/root/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz
     # DLR
     $ROOT_DIR/root/osrt-build/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl
-    # TIDL runtime modules: J784S4
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J784S4/A72/LINUX/release/libvx_tidl_rt.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    # TIDL runtime modules: J721S2
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J721S2/A72/LINUX/release/libvx_tidl_rt.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721S2/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721S2/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    # TIDL runtime modules: J721E
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J721E/A72/LINUX/release/libvx_tidl_rt.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721E/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J721E/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    # TIDL runtime modules: J722S
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/J722S/A53/LINUX/release/libvx_tidl_rt.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J722S/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J722S/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    # TIDL runtime modules: AM62A
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/AM62A/A53/LINUX/release/libvx_tidl_rt.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/AM62A/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
-    $ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/AM62A/A53/LINUX/release/libtidl_onnxrt_EP.so.1.0
 )
 
 for lib_file in "${lib_files[@]}"; do
@@ -54,6 +34,38 @@ for lib_file in "${lib_files[@]}"; do
     else
         echo "File $lib_file does not exist."
     fi
+done
+
+# collect the TIDL modules: under $TARGET_DIR/arm-tidl/$platform
+copy_lib_files() {
+    local target_dir=$1
+    shift
+    local lib_files=("$@")
+
+    mkdir -p "$TARGET_DIR/arm-tidl/$target_dir"
+    for lib_file in "${lib_files[@]}"; do
+        if [ -f "$lib_file" ]; then
+            cp "$lib_file" "$TARGET_DIR/arm-tidl/$target_dir"
+        else
+            echo "File $lib_file does not exist."
+        fi
+    done
+}
+
+platforms=("j784s4" "j721s2" "j721e" "j722s" "am62a")
+mpus=("A72" "A72" "A72" "A53" "A53")
+
+for i in "${!platforms[@]}"; do
+    platform=${platforms[$i]}
+    mpu=${mpus[$i]}
+
+    tidl_lib_files=(
+        "$ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/${platform^^}/${mpu}/LINUX/release/libvx_tidl_rt.so.1.0"
+        "$ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/${platform^^}/${mpu}/LINUX/release/libtidl_onnxrt_EP.so.1.0"
+        "$ROOT_DIR/root/osrt-build/workarea/arm-tidl/tfl_delegate/out/${platform^^}/${mpu}/LINUX/release/libtidl_tfl_delegate.so.1.0"
+    )
+
+    copy_lib_files "$platform" "${tidl_lib_files[@]}"
 done
 
 echo "collect_libs.sh: all the lib/whl files available on $TARGET_DIR"
