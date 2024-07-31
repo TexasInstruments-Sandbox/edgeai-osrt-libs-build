@@ -1,9 +1,9 @@
 #! /bin/bash
 # TIDL runtime modules: TIDL-RT, TFlite delegate lib and ONNX-RT execution provider lib
 
-# Requirement: vision-apps debian package is required which can be separately
+# Requirement: vision-apps debian packages are required which can be separately
 # built with "vision-apps-build".
-# Please place the vision-apps debian package under ${WORK_DIR}/workarea.
+# Please place the vision-apps debian packages under ${WORK_DIR}/workarea.
 
 set -e
 
@@ -11,18 +11,9 @@ current_dir=$(pwd)
 
 PROTOBUF_VER=3.20.2
 export CONCERTO_ROOT=${WORK_DIR}/workarea/concerto
-
-# install vision-apps.deb package
-: "${SOC:=j784s4}"
-DEB_PKG=libti-vision-apps-${SOC}_${SDK_VER}-${BASE_IMAGE//:/}.deb
-if [ -f "${WORK_DIR}/workarea/${DEB_PKG}" ]; then
-    dpkg -i ${WORK_DIR}/workarea/${DEB_PKG}
-else
-    echo "File $DEB_PKG does not exist."
-    exit 1
-fi
-
 TARGET_FS=""
+
+cd $WORK_DIR/workarea/arm-tidl
 
 # target platforms
 platforms=(
@@ -33,8 +24,6 @@ platforms=(
     am62a
 )
 
-cd $WORK_DIR/workarea/arm-tidl
-
 # scrub
 make rt_scrub tfl_delegate_scrub onnxrt_ep_scrub
 
@@ -42,10 +31,19 @@ make rt_scrub tfl_delegate_scrub onnxrt_ep_scrub
 for platform in ${platforms[@]}; do
     echo "Building for $platform ..."
 
+    # install vision-apps.deb package
+    DEB_PKG=libti-vision-apps-${platform}_${SDK_VER}-${BASE_IMAGE//:/}.deb
+    if [ -f "${WORK_DIR}/workarea/${DEB_PKG}" ]; then
+        dpkg -i ${WORK_DIR}/workarea/${DEB_PKG}
+    else
+        echo "File $DEB_PKG does not exist."
+        exit 1
+    fi
+
     # clean up
     make rt_clean tfl_delegate_clean onnxrt_ep_clean
 
-    # build
+    # build:
     # makerules available - all: rt tfl_delegate onnxrt_ep
     make -C ${WORK_DIR}/workarea/arm-tidl \
         PSDK_INSTALL_PATH=${WORK_DIR}/workarea/ \
@@ -63,6 +61,9 @@ for platform in ${platforms[@]}; do
         CROSS_COMPILE_LINARO= \
         LINUX_SYSROOT_ARM=$TARGET_FS \
         TREAT_WARNINGS_AS_ERROR=0
+
+    # uninstall vision-apps.deb package
+    dpkg -r libti-vision-apps-${platform}
 
 done
 
