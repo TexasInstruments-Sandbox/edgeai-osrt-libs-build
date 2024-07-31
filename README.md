@@ -1,7 +1,7 @@
-Open-Source Runtime Library Build in Target Docker Container
-============================================================
+Open-Source Runtime Library Build for Target Ubuntu/Debian Container
+====================================================================
 
-This build system covers building *ONNX-RT*, *FTLite-RT*, and *NEO-AI-DLR* from source for Ubuntu/Debian Docker container. Tested with PSDK 9.2 release in aarch64 Ubuntu 22.04 and aarch64 Debian 12.5 containers. For other PSDK release, patches and settings might be updated.
+This build system covers building *ONNX-RT*, *FTLite-RT*, *NEO-AI-DLR*, and *TIDL runtime modules* from source for Ubuntu/Debian Docker container. Tested with PSDK 9.2 release in aarch64 Ubuntu 22.04 and aarch64 Debian 12.5 containers. For other PSDK release, patches and settings might be updated.
 
 Supported use cases include:
 
@@ -67,7 +67,7 @@ All the commends below should be run **in the Docker container**.
 
 ### Prepare the source and update the build config
 
-Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `onnxruntime/cmake/external/protoc`. Currently it is set:
+Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `onnxruntime/cmake/external/protobuf`. Currently it is set:
 `PROTOBUF_VER=3.20.2`.
 
 
@@ -91,7 +91,7 @@ Update "`--path_to_protoc_exe`" in `onnxrt_build.sh` accordingly. To build ONNX-
 
 Outputs:
 - Shared lib: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/libonnxruntime.so.1.14.0`
-- Wheel file: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp36-cp36m-linux_aarch64.whl`
+- Wheel file: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl`
 
 ### Package
 
@@ -126,10 +126,7 @@ Outputs:
 - Static lib: `$WORK_DIR/workarea/tensorflow/tflite_build/libtensorflow-lite.a`
 - Wheel file: `$WORK_DIR/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl`
 
-### Package
-
-To package the resulting `.a` file and header files, you can use the following script:
-
+### Package_CORE
 ```bash
 ./tflite_package.sh
 ```
@@ -160,3 +157,32 @@ All the commends below should be run **in the Docker container**.
 ```
 
 Output wheel package: `$WORK_DIR/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl`
+
+<!-- ======================================= -->
+## Build TIDL Modules
+
+TIDL runtime modules include TIDL-RT library, TFLite-RT delegate library and ONNX-RT execution provider (EP) library.
+
+All the commends below should be run **in the Docker container**.
+
+### Prepare the source and update the build config
+
+Depend: `onnrt_prepare.sh`, `tflite_prepare.sh`, and `dlr_prepare.sh`
+
+```bash
+./tidl_prepare.sh
+```
+
+### Build
+
+**Requirement**: vision-apps debian packages are required which can be separately
+built with "vision-apps-build". Place the vision-apps debian packages under `${WORK_DIR}/workarea`.
+
+```bash
+./tidl_build.sh
+```
+
+Outputs:
+- TIDL-RT library: `$WORK_DIR/workarea/arm-tidl/rt/out/${SOC}/${MPU}/LINUX/release/libvx_tidl_rt.so.1.0`
+- TFLite-RT delegate library: `$WORK_DIR/workarea/arm-tidl/tfl_delegate/out/${SOC}/${MPU}/LINUX/release/libtidl_tfl_delegate.so.1.0`
+- ONNX-RT EP library: `$WORK_DIR/workarea/arm-tidl/onnxrt_ep/out/${SOC}/${MPU}/LINUX/release/libtidl_onnxrt_EP.so.1.0`

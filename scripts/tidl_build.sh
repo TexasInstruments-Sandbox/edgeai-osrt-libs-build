@@ -1,5 +1,5 @@
 #! /bin/bash
-# TIDL runtime modules: TIDL-RT, TFlite delegate lib and ONNX-RT execution provider lib
+# TIDL runtime modules: TIDL-RT, TFlite-RT delegate lib and ONNX-RT execution provider lib
 
 # Requirement: vision-apps debian packages are required which can be separately
 # built with "vision-apps-build".

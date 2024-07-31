@@ -30,6 +30,10 @@ lib_files=(
     $ROOT_DIR/home/root/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz
     # DLR
     $ROOT_DIR/home/root/osrt-build/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl
+    # TIDL runtime modules
+    $ROOT_DIR/home/root/osrt-build/workarea/arm-tidl/rt/out/J784S4/A72/LINUX/release/libvx_tidl_rt.so.1.0
+    $ROOT_DIR/home/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
+    $ROOT_DIR/home/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/J784S4/A72/LINUX/release/libtidl_onnxrt_EP.so.1.0
 )
 
 for lib_file in "${lib_files[@]}"; do
