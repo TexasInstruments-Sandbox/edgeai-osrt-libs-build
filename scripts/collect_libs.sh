@@ -19,7 +19,9 @@ ROOT_DIR=""
 
 lib_files=(
     # ONNX
-    $ROOT_DIR/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl
+    # TODO: check why "+10000000" was added in the whl package name
+    # $ROOT_DIR/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl
+    $ROOT_DIR/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+10000000-cp310-cp310-linux_aarch64.whl
     $ROOT_DIR/root/osrt-build/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz
     # TFLite
     $ROOT_DIR/root/osrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl
@@ -32,9 +34,13 @@ for lib_file in "${lib_files[@]}"; do
     if [ -f "$lib_file" ]; then
         cp "$lib_file" "$TARGET_DIR"
     else
-        echo "File $lib_file does not exist."
+        echo "Error: File $lib_file does not exist."
+        exit 1
     fi
 done
+
+# temporary
+mv $TARGET_DIR/onnxruntime_tidl-1.14.0+10000000-cp310-cp310-linux_aarch64.whl $TARGET_DIR/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl
 
 # collect the TIDL modules: under $TARGET_DIR/arm-tidl/$platform
 copy_lib_files() {
@@ -47,7 +53,8 @@ copy_lib_files() {
         if [ -f "$lib_file" ]; then
             cp "$lib_file" "$TARGET_DIR/arm-tidl/$target_dir"
         else
-            echo "File $lib_file does not exist."
+            echo "Error: File $lib_file does not exist."
+            exit 1
         fi
     done
 }
