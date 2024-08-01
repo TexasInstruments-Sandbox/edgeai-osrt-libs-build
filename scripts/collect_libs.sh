@@ -37,9 +37,6 @@ for lib_file in "${lib_files[@]}"; do
     fi
 done
 
-# temporary
-mv $TARGET_DIR/onnxruntime_tidl-1.14.0+10000000-cp310-cp310-linux_aarch64.whl $TARGET_DIR/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl
-
 # collect the TIDL modules: under $TARGET_DIR/arm-tidl/$platform
 copy_lib_files() {
     local target_dir=$1
