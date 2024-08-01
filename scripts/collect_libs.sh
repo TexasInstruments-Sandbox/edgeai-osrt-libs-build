@@ -19,8 +19,6 @@ ROOT_DIR=""
 
 lib_files=(
     # ONNX
-    # TODO: check why "+10000000" was added in the whl package name
-    # $ROOT_DIR/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl
     $ROOT_DIR/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+10000000-cp310-cp310-linux_aarch64.whl
     $ROOT_DIR/root/osrt-build/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz
     # TFLite
