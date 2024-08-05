@@ -2,13 +2,12 @@
 # This script should be run on the host Linux / PSDK-Linux
 # This script is for ubuntu:22.04, update as needed.
 set -e
-
-current_dir=$(pwd)
-
-if [ -f /.dockerenv ]; then
-    echo "You're inside a Docker container. This script should be run on the host Linux / PSDK-Linux"
+if [ ! -f /.dockerenv ]; then
+    echo "This script should be run inside the osrt-build Docker container"
     exit 1
 fi
+
+current_dir=$(pwd)
 
 cd $WORK_DIR/scripts
 

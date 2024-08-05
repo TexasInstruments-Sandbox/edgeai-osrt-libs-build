@@ -1,8 +1,11 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
 # Depend: onnrt_prepare.sh, tflite_prepare.sh, dlr_prepare.sh
-
 set -e
+if [ ! -f /.dockerenv ]; then
+    echo "This script should be run inside the osrt-build Docker container"
+    exit 1
+fi
 
 current_dir=$(pwd)
 cd ${WORK_DIR}/workarea

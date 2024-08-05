@@ -2,6 +2,10 @@
 # This script should be run inside the CONTAINER
 
 set -e
+if [ ! -f /.dockerenv ]; then
+    echo "This script should be run inside the osrt-build Docker container"
+    exit 1
+fi
 
 current_dir=$(pwd)
 NPROC=7
