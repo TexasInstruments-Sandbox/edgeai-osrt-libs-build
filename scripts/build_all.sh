@@ -33,6 +33,28 @@ echo "======> TVM-DLR"
 
 # TIDL Modules
 echo "======> TIDL Modules"
+function copy_vision_apps_deb_files() {
+    local SRC_DIR=$HOME/ubuntu22-deps
+    local DST_DIR=$WORK_DIR/workarea
+    local lib_files=(
+        # Vision-apps libs for all the platforms
+        $SRC_DIR/libti-vision-apps-j784s4_10.0.0-ubuntu22.04.deb
+        $SRC_DIR/libti-vision-apps-j721s2_10.0.0-ubuntu22.04.deb
+        $SRC_DIR/libti-vision-apps-j721e_10.0.0-ubuntu22.04.deb
+        $SRC_DIR/libti-vision-apps-j722s_10.0.0-ubuntu22.04.deb
+        $SRC_DIR/libti-vision-apps-am62a_10.0.0-ubuntu22.04.deb
+    )
+
+    for lib_file in "${lib_files[@]}"; do
+        if [ -f "$lib_file" ]; then
+            cp "$lib_file" "$DST_DIR"
+        else
+            echo "Error: File $lib_file does not exist."
+            exit 1
+        fi
+    done
+}
+copy_vision_apps_deb_files
 ./tidl_prepare.sh
 ./tidl_build.sh
 
