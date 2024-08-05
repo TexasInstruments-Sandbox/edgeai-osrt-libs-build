@@ -15,17 +15,15 @@ TARGET_DIR=$HOME/ubuntu22-deps
 # rm -rf $TARGET_DIR
 mkdir -p $TARGET_DIR
 
-ROOT_DIR=""
-
 lib_files=(
     # ONNX
-    $ROOT_DIR/root/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+10000000-cp310-cp310-linux_aarch64.whl
-    $ROOT_DIR/root/osrt-build/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz
+    $HOME/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+10000000-cp310-cp310-linux_aarch64.whl
+    $HOME/osrt-build/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz
     # TFLite
-    $ROOT_DIR/root/osrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl
-    $ROOT_DIR/root/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz
+    $HOME/osrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl
+    $HOME/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz
     # DLR
-    $ROOT_DIR/root/osrt-build/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl
+    $HOME/osrt-build/workarea/neo-ai-dlr/python/dist/dlr-1.13.0-py3-none-any.whl
 )
 
 for lib_file in "${lib_files[@]}"; do
@@ -62,9 +60,9 @@ for i in "${!platforms[@]}"; do
     mpu=${mpus[$i]}
 
     tidl_lib_files=(
-        "$ROOT_DIR/root/osrt-build/workarea/arm-tidl/rt/out/${platform^^}/${mpu}/LINUX/release/libvx_tidl_rt.so.1.0"
-        "$ROOT_DIR/root/osrt-build/workarea/arm-tidl/onnxrt_ep/out/${platform^^}/${mpu}/LINUX/release/libtidl_onnxrt_EP.so.1.0"
-        "$ROOT_DIR/root/osrt-build/workarea/arm-tidl/tfl_delegate/out/${platform^^}/${mpu}/LINUX/release/libtidl_tfl_delegate.so.1.0"
+        "$HOME/osrt-build/workarea/arm-tidl/rt/out/${platform^^}/${mpu}/LINUX/release/libvx_tidl_rt.so.1.0"
+        "$HOME/osrt-build/workarea/arm-tidl/onnxrt_ep/out/${platform^^}/${mpu}/LINUX/release/libtidl_onnxrt_EP.so.1.0"
+        "$HOME/osrt-build/workarea/arm-tidl/tfl_delegate/out/${platform^^}/${mpu}/LINUX/release/libtidl_tfl_delegate.so.1.0"
     )
 
     copy_lib_files "$platform" "${tidl_lib_files[@]}"
