@@ -53,6 +53,7 @@ docker run -it --rm \
     -v ${PWD}/scripts:/root/osrt-build/scripts \
     -v ${PWD}/patches:/root/osrt-build/patches \
     -v ${PWD}/workarea:/root/osrt-build/workarea \
+    -v ${HOME}/ubuntu22-deps:/root/ubuntu22-deps \
     --privileged \
     --network host \
     --env USE_PROXY=$USE_PROXY \
