@@ -19,7 +19,7 @@ git submodule update --quiet --init --recursive --depth=1
 cp ../../patches/neo-ai-dlr/cmake/aarch64-linux-gcc-native.cmake ./cmake
 
 # clone the arm-tidl repo
-REPO_TAG="REL.PSDK.ANALYTICS.10.00.00.02" # SHA: 33e5d9a170475c31f2a65e2c83d86465fe21212e
+REPO_TAG="REL.PSDK.ANALYTICS.10.00.00.03" # SHA: a171c3002a18ae7042cb620d8666545928e56b16
 cd $WORK_DIR/workarea
 git clone --branch $REPO_TAG --single-branch https://git.ti.com/git/processor-sdk-vision/arm-tidl.git
 
