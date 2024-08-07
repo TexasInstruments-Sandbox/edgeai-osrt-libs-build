@@ -18,7 +18,7 @@ mkdir -p $TARGET_DIR
 lib_files=(
     # ONNX
     $HOME/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+10000000-cp310-cp310-linux_aarch64.whl
-    $HOME/osrt-build/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz
+    $HOME/osrt-build/workarea/onnx-1.14.0+10000000-ubuntu22.04_aarch64.tar.gz
     # TFLite
     $HOME/osrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl
     $HOME/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz

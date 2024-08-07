@@ -14,7 +14,7 @@ cd $WORK_DIR/workarea
 : "${ONNX_VER:=1.14.0}"
 : "${ONNX_TIDL_VER:=10000000}"
 PKG_DIST=${BASE_IMAGE//:/}
-DST_DIR=onnx-${ONNX_VER}-${PKG_DIST}_aarch64
+DST_DIR=onnx-${ONNX_VER}+${ONNX_TIDL_VER}-${PKG_DIST}_aarch64
 LIB_DIR=onnxruntime/build/Linux/Release
 TARBALL=$DST_DIR.tar.gz
 
