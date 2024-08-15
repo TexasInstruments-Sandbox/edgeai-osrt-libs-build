@@ -12,6 +12,8 @@
 #    update PROTOBUF_VER as in onnxrt_prepare.sh
 
 set -e
+source utils.sh
+
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"
     exit 1
@@ -25,7 +27,7 @@ cd $WORK_DIR/workarea/onnxruntime
 SECONDS=0
 
 # update how many CPUs to use
-PROTOBUF_VER=3.20.2
+protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
 ./build.sh --parallel $NPROC \
 --compile_no_warning_as_error \
 --skip_tests \
@@ -33,7 +35,7 @@ PROTOBUF_VER=3.20.2
 --build_shared_lib \
 --config Release \
 --cmake_extra_defines="CMAKE_TOOLCHAIN_FILE=$(pwd)/tool.cmake" \
---path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
+--path_to_protoc_exe $(pwd)/cmake/external/protoc-${protobuf_ver}-linux-aarch_64/bin/protoc \
 --use_tidl \
 --build_wheel
 

@@ -1,0 +1,51 @@
+# PSDK-Linux for EdgeAI 10.00.00.07
+
+# below is for vision-apps-lib-build. Reference:
+# https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-psdk-rtos/ti-vision-apps.bb?h=scarthgap
+psdk_repo_manifests:
+  url: "https://git.ti.com/git/processor-sdk/psdk_repo_manifests.git"
+  tag: "REL.PSDK.ANALYTICS.10.00.00.04"
+  branch: "main"
+  commit: "3f2841538359d6f76a6c3ce887ee2172ae55d5b1"
+
+# Below are for osrt-build. References:
+# https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-tidl/ti-tidl.bb?h=scarthgap
+# https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-tidl/ti-tidl-osrt.bb?h=scarthgap
+arm-tidl:
+  url: "https://git.ti.com/git/processor-sdk-vision/arm-tidl.git"
+  tag: "REL.PSDK.ANALYTICS.10.00.00.04"
+  branch: "master"
+  commit: "d71785f6619bcc07f2fc6ed59cefe1de8fb18288"
+
+concerto:
+  url: "https://git.ti.com/git/processor-sdk/concerto.git"
+  tag: "REL.PSDK.ANALYTICS.10.00.00.04"
+  branch: "main"
+  commit: "38b9190a5d335e58d81d21e3e058b11e5c47c605"
+
+onnxruntime:
+  url: "https://github.com/TexasInstruments/onnxruntime.git"
+  tag: "None"
+  branch: "mtidl-1.14"
+  commit: "b07b733888500a37064f560f3d61d5c8ab1201c7"
+  onnx_ver: "1.14.0"
+  tidl_ver: "10000005"
+  protobuf_ver: "3.20.2"
+
+tensorflow:
+  url: "https://github.com/TexasInstruments/tensorflow.git"
+  tag: "REL.TIDL.10.00.00.03"
+  branch: "tidl-j7-2.12"
+  commit: "422156a973b23bab6b86176a245a66193dccb995"
+
+neo-ai-dl:
+  url: "https://github.com/TexasInstruments/neo-ai-dlr.git"
+  tag: "TIDL_PSDK_10.0.2"
+  branch: "tidl-j7"
+  commit: "2c932cf08f81f69a205e415b2cf3227107fb7ecb"
+
+ti-rpmsg-char:
+  url: "https://git.ti.com/git/rpmsg/ti-rpmsg-char.git"
+  tag: "0.6.7"
+  branch: "master"
+  commit: "5100a2e4a4a951e40ea0708fa78960770ec0ac33"

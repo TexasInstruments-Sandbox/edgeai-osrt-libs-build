@@ -1,6 +1,8 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
 set -e
+source utils.sh
+
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"
     exit 1
@@ -11,18 +13,18 @@ current_dir=$(pwd)
 cd $WORK_DIR/workarea
 
 ## package into a tarball
-: "${ONNX_VER:=1.14.0}"
-: "${ONNX_TIDL_VER:=10000000}"
+ONNX_VER=$(get_yaml_value "onnxruntime" "onnx_ver")
+TIDL_VER=$(get_yaml_value "onnxruntime" "tidl_ver")
 PKG_DIST=${BASE_IMAGE//:/}
-DST_DIR=onnx-${ONNX_VER}+${ONNX_TIDL_VER}-${PKG_DIST}_aarch64
+DST_DIR=onnx-${ONNX_VER}+${TIDL_VER}-${PKG_DIST}_aarch64
 LIB_DIR=onnxruntime/build/Linux/Release
 TARBALL=$DST_DIR.tar.gz
 
-rm -rf $DST_DIR
-mkdir -p $DST_DIR/onnxruntime
+rm -rf "$DST_DIR"
+mkdir -p "$DST_DIR/onnxruntime"
 
 # package .so
-cp $LIB_DIR/libonnxruntime.so.${ONNX_VER}+${ONNX_TIDL_VER} $DST_DIR
+cp "$LIB_DIR/libonnxruntime.so.${ONNX_VER}+${TIDL_VER} $DST_DIR"
 
 # package header files in an entire nested directory keeping the same hierarchy
 # TODO: package only necessary header files for ONNX-RT
