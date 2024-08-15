@@ -1,4 +1,5 @@
 #!/bin/bash
+# Utility functions
 
 # config file path
 config_file="$WORK_DIR/scripts/config.yaml"
@@ -54,7 +55,7 @@ copy_and_backup() {
     src_file=$1
     dest_file=$2
     if [ -f "$dest_file" ]; then
-        mv  $dest_file $dest_file.ORG
+        mv "$dest_file" "$dest_file.ORG"
     fi
-    cp $src_file $dest_file
+    cp "$src_file" "$dest_file"
 }

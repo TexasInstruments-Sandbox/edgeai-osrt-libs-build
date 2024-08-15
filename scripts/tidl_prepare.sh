@@ -23,11 +23,11 @@ else
 fi
 
 # protobuf source
-PROTOBUF_VER=$(get_yaml_value "onnxruntime" "protobuf_ver")
-REPO_DIR="${WORK_DIR}/workarea/protobuf-${PROTOBUF_VER}"
+protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
+REPO_DIR="${WORK_DIR}/workarea/protobuf-${protobuf_ver}"
 if [ ! -d "$REPO_DIR" ]; then
-    wget -q https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/protobuf-cpp-${PROTOBUF_VER}.tar.gz
-    tar -xzf protobuf-cpp-${PROTOBUF_VER}.tar.gz
+    wget -q "https://github.com/protocolbuffers/protobuf/releases/download/v${protobuf_ver}/protobuf-cpp-${protobuf_ver}.tar.gz"
+    tar -xzf "protobuf-cpp-${protobuf_ver}.tar.gz"
 else
     echo "Directory $REPO_DIR already exists. Skipping."
 fi

@@ -13,26 +13,32 @@ current_dir=$(pwd)
 cd $WORK_DIR/workarea
 
 ## package into a tarball
-ONNX_VER=$(get_yaml_value "onnxruntime" "onnx_ver")
-TIDL_VER=$(get_yaml_value "onnxruntime" "tidl_ver")
-PKG_DIST=${BASE_IMAGE//:/}
-DST_DIR=onnx-${ONNX_VER}+${TIDL_VER}-${PKG_DIST}_aarch64
-LIB_DIR=onnxruntime/build/Linux/Release
-TARBALL=$DST_DIR.tar.gz
+onnx_ver=$(get_yaml_value "onnxruntime" "onnx_ver")
+tidl_ver=$(get_yaml_value "onnxruntime" "tidl_ver")
+pkg_dist=${BASE_IMAGE//:/}
+DST_DIR="onnx-${onnx_ver}+${tidl_ver}-${pkg_dist}_aarch64"
+LIB_DIR="onnxruntime/build/Linux/Release"
+TARBALL="${DST_DIR}.tar.gz"
 
 rm -rf "$DST_DIR"
-mkdir -p "$DST_DIR/onnxruntime"
+mkdir -p "${DST_DIR}/onnxruntime"
 
 # package .so
-cp "$LIB_DIR/libonnxruntime.so.${ONNX_VER}+${TIDL_VER} $DST_DIR"
+src_lib_file="${LIB_DIR}/libonnxruntime.so.${onnx_ver}+${tidl_ver}"
+if [ -f "$src_lib_file" ]; then
+    cp "$src_lib_file" "$DST_DIR"
+else
+    echo "Error: $src_lib_file does not exist"
+    exit 1
+fi
 
 # package header files in an entire nested directory keeping the same hierarchy
 # TODO: package only necessary header files for ONNX-RT
-cd $WORK_DIR/workarea
+cd "${WORK_DIR}/workarea"
 (cd ./onnxruntime && find . -name '*.h' -print | tar --create --files-from -) | (cd $DST_DIR/onnxruntime && tar xvfp -)
 
 # make the tarball
-cd $WORK_DIR/workarea
+cd "${WORK_DIR}/workarea"
 if [ -z "$TARBALL" ]; then
     rm "$TARBALL"
 fi

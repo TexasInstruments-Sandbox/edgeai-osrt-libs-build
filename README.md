@@ -90,8 +90,8 @@ Update "`--path_to_protoc_exe`" in `onnxrt_build.sh` accordingly. To build ONNX-
 ```
 
 Outputs:
-- Shared lib: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/libonnxruntime.so.1.14.0`
-- Wheel file: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0-cp310-cp310-linux_aarch64.whl`
+- Shared lib: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/libonnxruntime.so.1.14.0+${TIDL_VER}`
+- Wheel file: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+${TIDL_VER}-cp310-cp310-linux_aarch64.whl`
 
 ### Package
 
