@@ -2,6 +2,8 @@
 # This script is expected to run inside the CONTAINER
 # Depend: onnrt_prepare.sh, tflite_prepare.sh, dlr_prepare.sh
 set -e
+source utils.sh
+
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"
     exit 1
@@ -11,16 +13,17 @@ current_dir=$(pwd)
 cd ${WORK_DIR}/workarea
 
 # clone concerto
-REPO_TAG=REL.PSDK.ANALYTICS.10.00.00.03 # SHA: a171c3002a18ae7042cb620d8666545928e56b16
+# parse repo info from config.yaml: repo_url, repo_tag, repo_branch, repo_commit
+extract_repo_info "concerto"
 REPO_DIR="${WORK_DIR}/workarea/concerto"
 if [ ! -d "$REPO_DIR" ]; then
-    git clone https://git.ti.com/git/processor-sdk/concerto.git --branch $REPO_TAG --depth 1 --single-branch
+    clone_repo "$repo_url" "$repo_tag" "$repo_branch" "$repo_commit" concerto
 else
     echo "Directory $REPO_DIR already exists. Skipping."
 fi
 
 # protobuf source
-PROTOBUF_VER=3.20.2
+PROTOBUF_VER=$(get_yaml_value "onnxruntime" "protobuf_ver")
 REPO_DIR="${WORK_DIR}/workarea/protobuf-${PROTOBUF_VER}"
 if [ ! -d "$REPO_DIR" ]; then
     wget -q https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/protobuf-cpp-${PROTOBUF_VER}.tar.gz

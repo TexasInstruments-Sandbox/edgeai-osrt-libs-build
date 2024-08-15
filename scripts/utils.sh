@@ -48,3 +48,13 @@ clone_repo() {
         git clone --branch "$tag" --depth 1 --single-branch "$repo_url" "$repo_name"
     fi
 }
+
+# Function to copy a file and backup the original if it exists
+copy_and_backup() {
+    src_file=$1
+    dest_file=$2
+    if [ -f "$dest_file" ]; then
+        mv  $dest_file $dest_file.ORG
+    fi
+    cp $src_file $dest_file
+}

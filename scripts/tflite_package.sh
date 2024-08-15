@@ -1,6 +1,8 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
 set -e
+source utils.sh
+
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"
     exit 1
@@ -11,7 +13,7 @@ current_dir=$(pwd)
 cd $WORK_DIR/workarea
 
 ## package into a tarball
-: "${TF_VER:=2.12}"
+TF_VER=$(get_yaml_value "tensorflow" "tf_ver")
 PKG_DIST=${BASE_IMAGE//:/}
 DST_DIR=tflite-${TF_VER}-${PKG_DIST}_aarch64
 LIB_DIR=tensorflow/tflite_build

@@ -21,13 +21,13 @@ fi
 
 current_dir=$(pwd)
 NPROC=7
+protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
 
 cd $WORK_DIR/workarea/onnxruntime
 
 SECONDS=0
 
 # update how many CPUs to use
-protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
 ./build.sh --parallel $NPROC \
 --compile_no_warning_as_error \
 --skip_tests \

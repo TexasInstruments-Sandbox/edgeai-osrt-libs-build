@@ -5,6 +5,8 @@
 # built with "vision-apps-build".
 # Please place the vision-apps debian packages under ${WORK_DIR}/workarea.
 set -e
+source utils.sh
+
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"
     exit 1
@@ -12,7 +14,7 @@ fi
 
 current_dir=$(pwd)
 
-PROTOBUF_VER=3.20.2
+PROTOBUF_VER=$(get_yaml_value "onnxruntime" "protobuf_ver")
 export CONCERTO_ROOT=${WORK_DIR}/workarea/concerto
 TARGET_FS=""
 

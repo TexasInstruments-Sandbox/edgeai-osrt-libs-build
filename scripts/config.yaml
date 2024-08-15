@@ -37,12 +37,14 @@ tensorflow:
   tag: "REL.TIDL.10.00.00.03"
   branch: "tidl-j7-2.12"
   commit: "422156a973b23bab6b86176a245a66193dccb995"
+  tf_ver: "2.12"
 
-neo-ai-dl:
+neo-ai-dlr:
   url: "https://github.com/TexasInstruments/neo-ai-dlr.git"
   tag: "TIDL_PSDK_10.0.2"
   branch: "tidl-j7"
   commit: "2c932cf08f81f69a205e415b2cf3227107fb7ecb"
+  dlr_ver: "1.13.0"
 
 ti-rpmsg-char:
   url: "https://git.ti.com/git/rpmsg/ti-rpmsg-char.git"
