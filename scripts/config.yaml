@@ -26,7 +26,7 @@ concerto:
 onnxruntime:
   url: "https://github.com/TexasInstruments/onnxruntime.git"
   tag: "None"
-  branch: "mtidl-1.14"
+  branch: "tidl-1.14"
   commit: "b07b733888500a37064f560f3d61d5c8ab1201c7"
   onnx_ver: "1.14.0"
   tidl_ver: "10000005"

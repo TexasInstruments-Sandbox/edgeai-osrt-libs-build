@@ -30,6 +30,7 @@ cp ../../patches/onnxruntime/tool.cmake .
 # pre-built protobuf
 # update protobuf_ver by, e.g., "git log" at <onnxruntime>/cmake/external/protobuf
 protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
+echo "protobuf_ver=$protobuf_ver"
 zip_file="protoc-${protobuf_ver}-linux-aarch_64.zip"
 cd $WORK_DIR/workarea
 curl -O -L "https://github.com/protocolbuffers/protobuf/releases/download/v${protobuf_ver}/${zip_file}"

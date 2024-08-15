@@ -1,10 +1,12 @@
 #!/bin/bash
 
+# config file path
+config_file="$WORK_DIR/scripts/config.yaml"
+
 # Function to get a value from the YAML file
 get_yaml_value() {
     local repo=$1
     local key=$2
-    local config_file="config.yaml"
 
     # Extract the value using yq
     value=$(yq e ".${repo}.${key}" "$config_file")
@@ -14,7 +16,6 @@ get_yaml_value() {
 # Function to extract repository information from the YAML file
 extract_repo_info() {
     local repo=$1
-    local config_file="config.yaml"
 
     repo_url=$(yq e ".${repo}.url" "$config_file")
     repo_tag=$(yq e ".${repo}.tag" "$config_file")
