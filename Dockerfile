@@ -119,6 +119,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libdrm-dev && \
     rm -rf /var/lib/apt/lists/*
 
+# install yq
+RUN wget https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_${ARCH} -O /usr/local/bin/yq && \
+    chmod +x /usr/local/bin/yq
+
 #=========================================================================
 # add scripts
 COPY entrypoint.sh /root/entrypoint.sh
