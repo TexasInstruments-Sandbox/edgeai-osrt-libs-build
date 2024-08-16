@@ -1,13 +1,5 @@
 # PSDK-Linux for EdgeAI 10.00.00.07
 
-# below is for vision-apps-lib-build. Reference:
-# https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-psdk-rtos/ti-vision-apps.bb?h=scarthgap
-psdk_repo_manifests:
-  url: "https://git.ti.com/git/processor-sdk/psdk_repo_manifests.git"
-  tag: "REL.PSDK.ANALYTICS.10.00.00.04"
-  branch: "main"
-  commit: "3f2841538359d6f76a6c3ce887ee2172ae55d5b1"
-
 # Below are for osrt-build. References:
 # https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-tidl/ti-tidl.bb?h=scarthgap
 # https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-tidl/ti-tidl-osrt.bb?h=scarthgap
