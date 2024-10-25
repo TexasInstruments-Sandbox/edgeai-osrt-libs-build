@@ -2,7 +2,7 @@
 # This script is expected to run inside the CONTAINER
 # Depend: onnrt_prepare.sh, tflite_prepare.sh, dlr_prepare.sh
 set -e
-source utils.sh
+source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"

@@ -1,7 +1,7 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
 set -e
-source utils.sh
+source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"

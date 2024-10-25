@@ -1,7 +1,7 @@
 Open-Source Runtime Library Build for Target Ubuntu/Debian Container
 ====================================================================
 
-This build system covers building *ONNX-RT*, *FTLite-RT*, *NEO-AI-DLR*, and *TIDL runtime modules* from source for Ubuntu/Debian Docker container. Tested with PSDK 9.2 release in aarch64 Ubuntu 22.04 and aarch64 Debian 12.5 containers. For other PSDK release, patches and settings might be updated.
+This build system covers building *ONNX-RT*, *FTLite-RT*, *NEO-AI-DLR*, and *TIDL runtime modules* from source for Ubuntu/Debian Docker container. Tested in aarch64 Ubuntu 22.04 and aarch64 Debian 12.5 containers.
 
 Supported use cases include:
 

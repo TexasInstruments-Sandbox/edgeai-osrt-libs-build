@@ -6,7 +6,7 @@
 # Please place the vision-apps debian packages under ${HOME}/ubuntu22-deps.
 # docker_run.sh has -v ${HOME}/ubuntu22-deps:/root/ubuntu22-deps
 set -e
-source utils.sh
+source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"

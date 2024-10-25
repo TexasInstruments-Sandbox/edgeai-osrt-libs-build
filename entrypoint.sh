@@ -40,7 +40,7 @@ echo "$(arch)"
 
 # Ubuntu version
 UBUNTU_VER=$(lsb_release -r | cut -f2)
-echo "$UBUNTU_VER=${UBUNTU_VER}"
+echo "UBUNTU_VER=${UBUNTU_VER}"
 echo "$BASE_IMAGE"
 
 # working dir
