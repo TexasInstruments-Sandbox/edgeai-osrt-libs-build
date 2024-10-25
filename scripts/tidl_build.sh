@@ -39,7 +39,8 @@ for platform in ${platforms[@]}; do
 
     # install vision-apps.deb package
     deb_pkg="libti-vision-apps-${platform}_${SDK_VER}-${BASE_IMAGE//:/}.deb"
-    deb_path="${HOME}/ubuntu22-deps/${deb_pkg}"
+    deb_dir="${HOME}/${BASE_IMAGE//:/}-deps"
+    deb_path="${deb_dir}/${deb_pkg}"
     if [ -f "$deb_path" ]; then
         dpkg -i "$deb_path"
     else
