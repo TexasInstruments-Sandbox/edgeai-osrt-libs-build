@@ -12,9 +12,6 @@ on:
       sdk_ver:
         required: true
         type: string
-      tidl_ver:
-        required: true
-        type: string
     secrets:
       env_PAT:
         required: true
@@ -72,20 +69,25 @@ jobs:
           # Remove '-it' in docker-run command in docker_run.sh
           sed -i.bak 's/docker run -it --rm \\/docker run --rm --platform linux\/arm64 \\/' docker_run.sh
 
-      - name: Prepare ONNX-RT source
+      - name: Prepare ARM-TIDL source
         run: |
           set -e
-          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_prepare.sh
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./tidl_prepare.sh
 
-      - name: Build ONNX-RT library
+      - name: Download vision-apps lib packages
         run: |
           set -e
-          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_build.sh
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./vision_apps_libs_download.sh
 
-      - name: Package ONNX-RT library
+      - name: Build ARM-TIDL libraries
         run: |
           set -e
-          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_package.sh
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./tidl_build.sh
+
+      - name: Package ARM-TIDL libraries
+        run: |
+          set -e
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./tidl_package.sh
 
       - name: Check for output files
         run: |

@@ -1,0 +1,125 @@
+name: master-workflow top
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ## Docker build
+  docker_build_ubuntu22-04:
+    uses: ./.github/workflows/docker-build.yml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "ubuntu:22.04"
+      sdk_ver: 10.0.0
+
+  docker_build_debian12-5:
+    uses: ./.github/workflows/docker-build.yml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "debian:12.5"
+      sdk_ver: 10.0.0
+
+  ## Library build: Ubuntu 22.04
+  onnxrt_build_ubuntu22-04:
+    needs: docker_build_ubuntu22-04
+    uses: ./.github/workflows/lib-onnxrt-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "ubuntu:22.04"
+      sdk_ver: 10.0.0
+
+  tflite_build_ubuntu22-04:
+    needs: docker_build_ubuntu22-04
+    uses: ./.github/workflows/lib-tflite-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "ubuntu:22.04"
+      sdk_ver: 10.0.0
+
+  dlr_build_ubuntu22-04:
+    needs: docker_build_ubuntu22-04
+    uses: ./.github/workflows/lib-dlr-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "ubuntu:22.04"
+      sdk_ver: 10.0.0
+
+  tidl_build_ubuntu22-04:
+    needs: docker_build_ubuntu22-04
+    uses: ./.github/workflows/lib-tidl-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "ubuntu:22.04"
+      sdk_ver: 10.0.0
+
+  ## Library build: Debian 12.5
+  onnxrt_build_debian12-5:
+    needs: docker_build_debian12-5
+    uses: ./.github/workflows/lib-onnxrt-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "debian:12.5"
+      sdk_ver: 10.0.0
+
+  tflite_build_debian12-5:
+    needs: docker_build_debian12-5
+    uses: ./.github/workflows/lib-tflite-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "debian:12.5"
+      sdk_ver: 10.0.0
+
+  dlr_build_debian12-5:
+    needs: docker_build_debian12-5
+    uses: ./.github/workflows/lib-dlr-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "debian:12.5"
+      sdk_ver: 10.0.0
+
+  tidl_build_debian12-5:
+    needs: docker_build_debian12-5
+    uses: ./.github/workflows/lib-tidl-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "debian:12.5"
+      sdk_ver: 10.0.0
+
+  ## Release
+  release:
+    uses: ./.github/workflows/release.yml
+    needs:
+      - onnxrt_build_ubuntu22-04
+      - tflite_build_ubuntu22-04
+      - dlr_build_ubuntu22-04
+      - tidl_build_ubuntu22-04
+      - onnxrt_build_debian12-5
+      - tflite_build_debian12-5
+      - dlr_build_debian12-5
+      - tidl_build_debian12-5
+    secrets:
+      gh_TOKEN: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      sdk_ver: 10.0.0
+

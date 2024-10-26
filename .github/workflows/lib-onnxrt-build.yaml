@@ -12,9 +12,6 @@ on:
       sdk_ver:
         required: true
         type: string
-      tidl_ver:
-        required: true
-        type: string
     secrets:
       env_PAT:
         required: true
