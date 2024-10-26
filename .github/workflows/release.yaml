@@ -1,0 +1,319 @@
+name: release reusable
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+      sdk_ver:
+        required: true
+        type: string
+    secrets:
+      gh_TOKEN:
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ensure all tags are fetched
+
+      - name: Set environment variables 1
+        id: set_env_1
+        run: |
+          release_tag=$(git describe --tags --abbrev=0)
+          echo "release_tag=${release_tag}" >> $GITHUB_ENV
+          sdk_ver=${{ inputs.sdk_ver }}
+          # base_images
+          base_images=(
+            ubuntu:22.04
+            debian:12.5
+          )
+          # platforms
+          platforms=(
+              j784s4
+              j721s2
+              j721e
+              j722s
+              am62a
+          )
+          # tidl package names
+          for base_image_ in ${base_images[@]}; do
+            base_image=${base_image_//:/}
+            base_image_var=${base_image//./-}
+            for platform in ${platforms[@]}; do
+              tidl_pkg_name=arm-tidl-${platform}_${sdk_ver}-${base_image}.tar.gz
+              echo "tidl_pkg_name_${platform}_${base_image_var}=${tidl_pkg_name}" >> $GITHUB_ENV
+              echo "tidl_pkg_path_${platform}_${base_image_var}=release-${base_image}/${tidl_pkg_name}" >> $GITHUB_ENV
+            done
+          done
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release
+
+      - name: Check for downloaded artifacts
+        run: ls -R release
+
+      - name: Set environment variables 2
+        id: set_env_2
+        run: |
+          # base_images
+          base_images=(
+            ubuntu:22.04
+            debian:12.5
+          )
+          # whl, pkg names
+          for base_image_ in ${base_images[@]}; do
+            base_image=${base_image_//:/}
+            base_image_var=${base_image//./-}
+            onnx_whl_path=$(find release/onnx-${base_image} -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl for ${base_image} wheel package not found."; exit 1; })
+            onnx_pkg_path=$(find release/onnx-${base_image} -name "onnx-*.tar.gz" || { echo "onnx tarball for ${base_image} not found."; exit 1; })
+            onnx_whl_name=$(basename ${onnx_whl_path})
+            onnx_pkg_name=$(basename ${onnx_pkg_path})
+            tflite_whl_path=$(find release/tflite-${base_image} -name "tfj722slite_runtime*.whl" || { echo "tflite_runtime whl for ${base_image} not found."; exit 1; })
+            tflite_pkg_path=$(find release/tflite-${base_image} -name "tflite-*_aarch64.tar.gz" || { echo "tflite lib tarball for ${base_image} not found."; exit 1; })
+            tflite_whl_name=$(basename $tflite_whl_path)
+            tflite_pkg_name=$(basename $tflite_pkg_path)
+            dlr_whl_path=$(find release/dlr-${base_image} -name "dlr-*.whl" || { echo "dlr wheel package for ${base_image} not found."; exit 1; })
+            dlr_whl_name=$(basename $dlr_whl_path)
+            # set env variables
+            echo "onnx_whl_path_${base_image_var}=${onnx_whl_path}" >> $GITHUB_ENV
+            echo "onnx_whl_name_${base_image_var}=${onnx_whl_name}" >> $GITHUB_ENV
+            echo "onnx_pkg_path_${base_image_var}=${onnx_pkg_path}" >> $GITHUB_ENV
+            echo "onnx_pkg_name_${base_image_var}=${onnx_pkg_name}" >> $GITHUB_ENV
+            echo "tflite_whl_path_${base_image_var}=${tflite_whl_path}" >> $GITHUB_ENV
+            echo "tflite_whl_name_${base_image_var}=${tflite_whl_name}" >> $GITHUB_ENV
+            echo "tflite_pkg_path_${base_image_var}=${tflite_pkg_path}" >> $GITHUB_ENV
+            echo "tflite_pkg_name_${base_image_var}=${tflite_pkg_name}" >> $GITHUB_ENV
+            echo "dlr_whl_path_${base_image_var}=${dlr_whl_path}" >> $GITHUB_ENV
+            echo "dlr_whl_name_${base_image_var}=${dlr_whl_name}" >> $GITHUB_ENV
+          done
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          tag_name: ${{ env.release_tag }}
+          release_name: ${{ env.release_tag }}
+          body: |
+            Compatible with Processor-SDK-Linux-EdgeAI ${{ env.release_tag }}. Check the matching version of the PSDK-Linux:
+            - AM69A (j784s4): https://www.ti.com/tool/download/PROCESSOR-SDK-LINUX-AM69A
+            - AM68A (j721s2): https://www.ti.com/tool/download/PROCESSOR-SDK-LINUX-AM68A
+            - TDA4VM (j721e): https://www.ti.com/tool/download/PROCESSOR-SDK-LINUX-SK-TDA4VM
+            - AM67A (j722s): https://www.ti.com/tool/download/PROCESSOR-SDK-LINUX-AM67A
+            - AM62A (am62a): https://www.ti.com/tool/download/PROCESSOR-SDK-LINUX-AM62A
+          draft: false
+          prerelease: false
+
+      ## Upload release: Ubuntu 22.04
+      - name: Upload onnx-whl-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.onnx_whl_path_ubuntu22-04 }}
+          asset_name: ${{ env.onnx_whl_name_ubuntu22-04 }}
+          asset_content_type: application/octet-stream
+
+      - name: Upload onnx-pkg-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.onnx_pkg_path_ubuntu22-04 }}
+          asset_name: ${{ env.onnx_pkg_name_ubuntu22-04 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tflite-whl-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tflite_whl_path_ubuntu22-04 }}
+          asset_name: ${{ env.tflite_whl_name_ubuntu22-04 }}
+          asset_content_type: application/octet-stream
+
+      - name: Upload tflite-pkg-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tflite_pkg_path_ubuntu22-04 }}
+          asset_name: ${{ env.tflite_pkg_name_ubuntu22-04 }}
+          asset_content_type: application/gzip
+
+      - name: Upload dlr-whl-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.dlr_whl_path_ubuntu22-04 }}
+          asset_name: ${{ env.dlr_whl_name_ubuntu22-04 }}
+          asset_content_type: application/octet-stream
+
+      ### ARM-TIDL for each platform
+      - name: Upload tidl-j784s4-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j784s4_ubuntu22-04 }}
+          asset_name: ${{ env.tidl_pkg_name_j784s4_ubuntu22-04 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-j721s2-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j721s2_ubuntu22-04 }}
+          asset_name: ${{ env.tidl_pkg_name_j721s2_ubuntu22-04 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-j721e-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j721e_ubuntu22-04 }}
+          asset_name: ${{ env.tidl_pkg_name_j721e_ubuntu22-04 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-j722s-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j722s_ubuntu22-04 }}
+          asset_name: ${{ env.tidl_pkg_name_j722s_ubuntu22-04 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-am62a-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_am62a_ubuntu22-04 }}
+          asset_name: ${{ env.tidl_pkg_name_am62a_ubuntu22-04 }}
+          asset_content_type: application/gzip
+
+      ## Upload release: Debian 12.5
+      - name: Upload onnx-whl-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.onnx_whl_path_debian12-5 }}
+          asset_name: ${{ env.onnx_whl_name_debian12-5 }}
+          asset_content_type: application/octet-stream
+
+      - name: Upload onnx-pkg-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.onnx_pkg_path_debian12-5 }}
+          asset_name: ${{ env.onnx_pkg_name_debian12-5 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tflite-whl-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tflite_whl_path_debian12-5 }}
+          asset_name: ${{ env.tflite_whl_name_debian12-5 }}
+          asset_content_type: application/octet-stream
+
+      - name: Upload tflite-pkg-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tflite_pkg_path_debian12-5 }}
+          asset_name: ${{ env.tflite_pkg_name_debian12-5 }}
+          asset_content_type: application/gzip
+
+      - name: Upload dlr-whl-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.dlr_whl_path_debian12-5 }}
+          asset_name: ${{ env.dlr_whl_name_debian12-5 }}
+          asset_content_type: application/octet-stream
+
+      ### ARM-TIDL for each platform
+      - name: Upload tidl-j784s4-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j784s4_debian12-5 }}
+          asset_name: ${{ env.tidl_pkg_name_j784s4_debian12-5 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-j721s2-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j721s2_debian12-5 }}
+          asset_name: ${{ env.tidl_pkg_name_j721s2_debian12-5 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-j721e-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j721e_debian12-5 }}
+          asset_name: ${{ env.tidl_pkg_name_j721e_debian12-5 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-j722s-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_j722s_debian12-5 }}
+          asset_name: ${{ env.tidl_pkg_name_j722s_debian12-5 }}
+          asset_content_type: application/gzip
+
+      - name: Upload tidl-am62a-debian12-5 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.tidl_pkg_path_am62a_debian12-5 }}
+          asset_name: ${{ env.tidl_pkg_name_am62a_debian12-5 }}
+          asset_content_type: application/gzip

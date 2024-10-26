@@ -6,7 +6,7 @@ on:
 jobs:
   ## Docker build
   docker_build_ubuntu22-04:
-    uses: ./.github/workflows/docker-build.yml
+    uses: ./.github/workflows/docker-build.yaml
     secrets:
       env_PAT: ${{ secrets.GHCR_PAT }}
     with:
@@ -15,7 +15,7 @@ jobs:
       sdk_ver: 10.0.0
 
   docker_build_debian12-5:
-    uses: ./.github/workflows/docker-build.yml
+    uses: ./.github/workflows/docker-build.yaml
     secrets:
       env_PAT: ${{ secrets.GHCR_PAT }}
     with:
@@ -107,7 +107,7 @@ jobs:
 
   ## Release
   release:
-    uses: ./.github/workflows/release.yml
+    uses: ./.github/workflows/release.yaml
     needs:
       - onnxrt_build_ubuntu22-04
       - tflite_build_ubuntu22-04

@@ -94,7 +94,7 @@ jobs:
           set -e
           find workarea -maxdepth 1 -name "arm-tidl-*.tar.gz" || { echo "arm-tidl lib tarballs not found."; exit 1; }
 
-      - name: Move output files to the release folder
+      - name: Copy output files to the release folder
         run: |
           set -e
           mkdir -p ${{ env.artifacts_dir }}
@@ -104,7 +104,9 @@ jobs:
             pkg_name=arm-tidl-${platform}_${{ inputs.sdk_ver }}-${base_image//:/}.tar.gz
             cp workarea/$pkg_name ${{ env.artifacts_dir }}
           done
-          ls -R ${{ env.artifacts_dir }}
+
+      - name: Check the release folder
+        run: ls -R ${{ env.artifacts_dir }}
 
       - name: Upload the artifacts folder
         uses: actions/upload-artifact@v4

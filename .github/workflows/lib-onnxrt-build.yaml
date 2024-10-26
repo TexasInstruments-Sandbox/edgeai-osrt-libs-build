@@ -107,7 +107,7 @@ jobs:
           echo "whl_path: ${{ env.whl_path }}"
           echo "pkg_path: ${{ env.pkg_path }}"
 
-      - name: Move output files to the artifact folder
+      - name: Copy output files to the artifact folder
         run: |
           set -e
           mkdir -p ${{ env.artifacts_dir }}
