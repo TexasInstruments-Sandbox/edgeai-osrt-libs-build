@@ -1,5 +1,4 @@
 #! /bin/bash
-set -e
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"
     exit 1
@@ -13,6 +12,11 @@ cd $WORK_DIR/workarea/neo-ai-dlr/python
 python3 ./setup.py bdist_wheel
 ls dist
 
+# copy whl package
+cd "${WORK_DIR}/workarea"
+whl_path=$(find neo-ai-dlr/python/dist -name "dlr-*.whl" || { echo "dlr wheel package not found."; exit 1; })
+cp $whl_path .
+
 cd $current_dir
 
-echo "dlr_package.sh: Completed!"
+echo "$(basename $0): Completed!"

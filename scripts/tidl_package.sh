@@ -1,6 +1,5 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -64,4 +63,4 @@ done
 
 cd $current_dir
 
-echo "tidl_package.sh: Completed!"
+echo "$(basename $0): Completed!"

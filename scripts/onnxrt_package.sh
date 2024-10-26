@@ -1,6 +1,5 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -45,6 +44,11 @@ fi
 tar czf $TARBALL $DST_DIR
 rm -rf $DST_DIR
 
+# copy whl package
+cd "${WORK_DIR}/workarea"
+whl_path=$(find onnxruntime/build/Linux/Release/dist -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; })
+cp $whl_path .
+
 cd $current_dir
 
-echo "onnxrt_package.sh: Completed!"
+echo "$(basename $0): Completed!"

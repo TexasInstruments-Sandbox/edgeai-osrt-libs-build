@@ -1,5 +1,4 @@
 #! /bin/bash
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -22,3 +21,5 @@ copy_and_backup ../../patches/tensorflow/tensorflow/lite/tools/pip_package/build
 tensorflow/lite/tools/pip_package/build_pip_package_with_cmake.sh
 
 cd $current_dir
+
+echo "$(basename $0): Completed!"

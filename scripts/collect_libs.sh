@@ -1,7 +1,6 @@
 #! /bin/bash
 # This script should be run on the host Linux / PSDK-Linux
 # This script is for ubuntu:22.04, update as needed.
-set -e
 WORK_DIR=${HOME}/osrt-build source utils.sh
 
 current_dir=$(pwd)

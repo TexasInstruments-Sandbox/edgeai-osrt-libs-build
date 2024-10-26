@@ -11,7 +11,6 @@
 #    --path_to_protoc_exe $(pwd)/cmake/external/protoc-${PROTOBUF_VER}-linux-aarch_64/bin/protoc \
 #    update PROTOBUF_VER as in onnxrt_prepare.sh
 
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -44,3 +43,5 @@ duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 
 cd $current_dir
+
+echo "$(basename $0): Completed!"

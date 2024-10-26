@@ -1,7 +1,6 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
 # Depend: onnrt_prepare.sh, tflite_prepare.sh, dlr_prepare.sh
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -60,4 +59,4 @@ fi
 
 cd ${current_dir}
 
-echo "tidl_prepare.sh: Completed!"
+echo "$(basename $0): Completed!"

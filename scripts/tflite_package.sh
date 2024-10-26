@@ -1,6 +1,5 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -53,6 +52,11 @@ fi
 tar czf $TARBALL $DST_DIR
 rm -rf $DST_DIR
 
+# copy whl package
+cd "${WORK_DIR}/workarea"
+whl_path=$(find tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist -name "tflite_runtime*.whl" || { echo "tflite_runtime whl not found."; exit 1; })
+cp $whl_path .
+
 cd $current_dir
 
-echo "tflite_package.sh: Completed!"
+echo "$(basename $0): Completed!"

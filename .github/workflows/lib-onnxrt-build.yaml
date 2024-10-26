@@ -92,7 +92,7 @@ jobs:
       - name: Check for output files
         run: |
           set -e
-          whl_path=$(find workarea/onnxruntime/out -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; })
+          whl_path=$(find workarea/onnxruntime/onnxruntime/build/Linux/Release/dist -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; })
           pkg_path=$(find workarea -maxdepth 1 -name "onnx-*.tar.gz" || { echo "onnx tarball not found."; exit 1; })
           whl_name=$(basename $whl_path)
           pkg_name=$(basename $pkg_path)
@@ -116,7 +116,7 @@ jobs:
           find ${{ env.artifacts_dir }} -name "${{ env.whl_name }}" || { echo "${{ env.whl_name }} not found."; exit 1; }
           find ${{ env.artifacts_dir }} -name "${{ env.pkg_name }}" || { echo "${{ env.pkg_name }} not found."; exit 1; }
 
-      - name: Upload artifacts
+      - name: Upload the artifacts folder
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.artifacts_name }}

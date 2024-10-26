@@ -92,8 +92,7 @@ jobs:
       - name: Check for output files
         run: |
           set -e
-          find workarea/onnxruntime/out -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; }
-          find workarea -name "onnx-*.tar.gz" || { echo "onnx tarball not found."; exit 1; }
+          find workarea -maxdepth 1 -name "arm-tidl-*.tar.gz" || { echo "arm-tidl lib tarballs not found."; exit 1; }
 
       - name: Move output files to the release folder
         run: |
@@ -104,10 +103,10 @@ jobs:
           for platform in "${platforms[@]}"; do
             pkg_name=arm-tidl-${platform}_${{ inputs.sdk_ver }}-${base_image//:/}.tar.gz
             cp workarea/$pkg_name ${{ env.artifacts_dir }}
-            find ${{ env.artifacts_dir }} -name $pkg_name || { echo "$pkg_name not found."; exit 1; }
           done
+          ls -R ${{ env.artifacts_dir }}
 
-      - name: Upload artifacts
+      - name: Upload the artifacts folder
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.artifacts_name }}

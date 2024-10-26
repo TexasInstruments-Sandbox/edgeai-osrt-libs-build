@@ -1,6 +1,5 @@
 #! /bin/bash
 # This script should be run inside the CONTAINER
-set -e
 if [ ! -f /.dockerenv ]; then
     echo "This script should be run inside the osrt-build Docker container"
     exit 1
@@ -20,3 +19,5 @@ duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 
 cd $current_dir
+
+echo "$(basename $0): Completed!"

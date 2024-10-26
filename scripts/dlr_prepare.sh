@@ -1,6 +1,5 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -26,3 +25,5 @@ cd $WORK_DIR/workarea
 clone_repo "$repo_url" "$repo_tag" "$repo_branch" "$repo_commit" arm-tidl
 
 cd $current_dir
+
+echo "$(basename $0): Completed!"

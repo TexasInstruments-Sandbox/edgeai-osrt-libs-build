@@ -1,6 +1,5 @@
 #! /bin/bash
 # This script is expected to run inside the CONTAINER
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 # base image: ubuntu:22.04, ubuntu20.04, debian:12.5, ...
@@ -49,4 +48,4 @@ done
 
 cd $current_dir
 
-echo "vision_apps_libs_download.sh: Completed!"
+echo "$(basename $0): Completed!"

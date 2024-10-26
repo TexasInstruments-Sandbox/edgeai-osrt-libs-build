@@ -2,10 +2,9 @@
 # TIDL runtime modules: TIDL-RT, TFlite-RT delegate lib and ONNX-RT execution provider lib
 
 # Requirement: vision-apps debian packages are required which can be separately
-# built with "vision-apps-build".
-# Please place the vision-apps debian packages under ${HOME}/ubuntu22-deps.
-# docker_run.sh has -v ${HOME}/ubuntu22-deps:/root/ubuntu22-deps
-set -e
+# built with "edgeai-vision-apps-lib-build".
+# Please place the vision-apps debian packages under ${HOME}/ubuntu22.04-deps.
+# docker_run.sh has -v ${HOME}/ubuntu22.04-deps:/root/ubuntu22.04-deps
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -76,3 +75,5 @@ for platform in ${platforms[@]}; do
 done
 
 cd $current_dir
+
+echo "$(basename $0): Completed!"

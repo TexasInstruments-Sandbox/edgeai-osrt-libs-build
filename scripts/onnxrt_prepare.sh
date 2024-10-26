@@ -1,5 +1,4 @@
 #! /bin/bash
-set -e
 source ${WORK_DIR}/scripts/utils.sh
 
 if [ ! -f /.dockerenv ]; then
@@ -37,3 +36,5 @@ unzip "$zip_file" -d "onnxruntime/cmake/external/protoc-${protobuf_ver}-linux-aa
 rm "$zip_file"
 
 cd $current_dir
+
+echo "$(basename $0): Completed!"
