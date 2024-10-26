@@ -167,20 +167,17 @@ All the commends below should be run **in the Docker container**.
 
 ### Prepare the source and update the build config
 
-Depend: `onnrt_prepare.sh`, `tflite_prepare.sh`, and `dlr_prepare.sh`
-
 ```bash
 ./tidl_prepare.sh
 ```
 
+### Build
+
 **Requirement**: vision-apps debian packages are required which can be separately
 built with "vision-apps-build". Below is for downloading the vision-apps debian packages under `${HOME}/ubuntu22.04-deps` or `${HOME}/debian12.5-deps`.
 ```bash
-BASE_IMAGE=ubuntu:22.04 ./vision_apps_libs_download.sh
-BASE_IMAGE=debian:12.5  ./vision_apps_libs_download.sh
+./vision_apps_libs_download.sh
 ```
-
-### Build
 
 ```bash
 ./tidl_build.sh
