@@ -1,0 +1,112 @@
+name: tidl-build reusable
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+      base_image:
+        required: true
+        type: string
+      sdk_ver:
+        required: true
+        type: string
+      tidl_ver:
+        required: true
+        type: string
+    secrets:
+      env_PAT:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.env_PAT }}
+
+      - name: Set environment variables
+        id: set_env
+        run: |
+          # docker tag
+          base_image=${{ inputs.base_image }}
+          docker_tag=osrt-builder:${{ inputs.sdk_ver }}-${{ inputs.arch }}-${base_image//:/}
+          remote_docker_tag=ghcr.io/${{ github.repository_owner }}/$docker_tag
+          remote_docker_tag=${remote_docker_tag,,}
+          # artifacts dir
+          artifacts_name=tidl-${base_image//:/}
+          artifacts_dir=release-${artifacts_name}
+          # register the env variables
+          echo "docker_tag=${docker_tag}" >> $GITHUB_ENV
+          echo "remote_docker_tag=${remote_docker_tag}" >> $GITHUB_ENV
+          echo "artifacts_name=${artifacts_name}" >> $GITHUB_ENV
+          echo "artifacts_dir=${artifacts_dir}" >> $GITHUB_ENV
+
+      - name: Pull and tag Docker image
+        run: |
+          set -e
+          docker pull $remote_docker_tag || { echo "Failed to pull Docker image."; exit 1; }
+          docker tag $remote_docker_tag $docker_tag
+          docker images
+
+      - name: Update docker_run.sh
+        run: |
+          set -e
+          # Remove '-it' in docker-run command in docker_run.sh
+          sed -i.bak 's/docker run -it --rm \\/docker run --rm --platform linux\/arm64 \\/' docker_run.sh
+
+      - name: Prepare ONNX-RT source
+        run: |
+          set -e
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_prepare.sh
+
+      - name: Build ONNX-RT library
+        run: |
+          set -e
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_build.sh
+
+      - name: Package ONNX-RT library
+        run: |
+          set -e
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_package.sh
+
+      - name: Check for output files
+        run: |
+          set -e
+          find workarea/onnxruntime/out -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; }
+          find workarea -name "onnx-*.tar.gz" || { echo "onnx tarball not found."; exit 1; }
+
+      - name: Move output files to the release folder
+        run: |
+          set -e
+          mkdir -p ${{ env.artifacts_dir }}
+          platforms=("j784s4" "j721s2" "j721e" "j722s" "am62a")
+          base_image=${{ inputs.base_image }}
+          for platform in "${platforms[@]}"; do
+            pkg_name=arm-tidl-${platform}_${{ inputs.sdk_ver }}-${base_image//:/}.tar.gz
+            cp workarea/$pkg_name ${{ env.artifacts_dir }}
+            find ${{ env.artifacts_dir }} -name $pkg_name || { echo "$pkg_name not found."; exit 1; }
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.artifacts_name }}
+          path: ${{ env.artifacts_dir }}

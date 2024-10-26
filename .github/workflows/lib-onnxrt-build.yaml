@@ -1,0 +1,126 @@
+name: onnxrt-build reusable
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+      base_image:
+        required: true
+        type: string
+      sdk_ver:
+        required: true
+        type: string
+      tidl_ver:
+        required: true
+        type: string
+    secrets:
+      env_PAT:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.env_PAT }}
+
+      - name: Set environment variables
+        id: set_env
+        run: |
+          # docker tag
+          base_image=${{ inputs.base_image }}
+          docker_tag=osrt-builder:${{ inputs.sdk_ver }}-${{ inputs.arch }}-${base_image//:/}
+          remote_docker_tag=ghcr.io/${{ github.repository_owner }}/$docker_tag
+          remote_docker_tag=${remote_docker_tag,,}
+          # package names: moved down
+          # whl_name=onnxruntime_tidl-1.14.0+${{ inputs.tidl_ver }}-cp310-cp310-linux_aarch64.whl
+          # whl_path=workarea/onnxruntime/build/Linux/Release/dist/${whl_name}
+          # pkg_name=onnx-1.14.0+${{ inputs.tidl_ver }}-${base_image//:/}_aarch64.tar.gz
+          # pkg_path=workarea/${pkg_name}
+          # artifacts dir
+          artifacts_name=onnxrt-${base_image//:/}
+          artifacts_dir=release-${artifacts_name}
+          # register the env variables
+          echo "docker_tag=${docker_tag}" >> $GITHUB_ENV
+          echo "remote_docker_tag=${remote_docker_tag}" >> $GITHUB_ENV
+          echo "artifacts_name=${artifacts_name}" >> $GITHUB_ENV
+          echo "artifacts_dir=${artifacts_dir}" >> $GITHUB_ENV
+
+      - name: Pull and tag Docker image
+        run: |
+          set -e
+          docker pull $remote_docker_tag || { echo "Failed to pull Docker image."; exit 1; }
+          docker tag $remote_docker_tag $docker_tag
+          docker images
+
+      - name: Update docker_run.sh
+        run: |
+          set -e
+          # Remove '-it' in docker-run command in docker_run.sh
+          sed -i.bak 's/docker run -it --rm/docker run --rm --platform linux\/arm64/' docker_run.sh
+
+      - name: Prepare ONNX-RT source
+        run: |
+          set -e
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_prepare.sh
+
+      - name: Build ONNX-RT library
+        run: |
+          set -e
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_build.sh
+
+      - name: Package ONNX-RT library
+        run: |
+          set -e
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_run.sh ./onnxrt_package.sh
+
+      - name: Check for output files
+        run: |
+          set -e
+          whl_path=$(find workarea/onnxruntime/out -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; })
+          pkg_path=$(find workarea -maxdepth 1 -name "onnx-*.tar.gz" || { echo "onnx tarball not found."; exit 1; })
+          whl_name=$(basename $whl_path)
+          pkg_name=$(basename $pkg_path)
+          echo "whl_path=${whl_path}" >> $GITHUB_ENV
+          echo "whl_name=${whl_name}" >> $GITHUB_ENV
+          echo "pkg_path=${pkg_path}" >> $GITHUB_ENV
+          echo "pkg_name=${pkg_name}" >> $GITHUB_ENV
+
+      - name: Print environment variables
+        run: |
+          echo "artifacts_dir: ${{ env.artifacts_dir }}"
+          echo "whl_path: ${{ env.whl_path }}"
+          echo "pkg_path: ${{ env.pkg_path }}"
+
+      - name: Move output files to the artifact folder
+        run: |
+          set -e
+          mkdir -p ${{ env.artifacts_dir }}
+          cp ${{ env.whl_path }} ${{ env.artifacts_dir }}
+          cp ${{ env.pkg_path }} ${{ env.artifacts_dir }}
+          find ${{ env.artifacts_dir }} -name "${{ env.whl_name }}" || { echo "${{ env.whl_name }} not found."; exit 1; }
+          find ${{ env.artifacts_dir }} -name "${{ env.pkg_name }}" || { echo "${{ env.pkg_name }} not found."; exit 1; }
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.artifacts_name }}
+          path: ${{ env.artifacts_dir }}

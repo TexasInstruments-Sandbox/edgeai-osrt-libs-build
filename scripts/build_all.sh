@@ -31,7 +31,7 @@ echo "======> TVM-DLR"
 ./dlr_package.sh
 
 # TIDL Modules
-# Requirement: vision-apps debian packages should be located under ${HOME}/ubuntu22-deps
+# Requirement: vision-apps debian packages should be located under ${HOME}/ubuntu22.04-deps
 echo "======> TIDL Modules"
 ./tidl_prepare.sh
 ./tidl_build.sh

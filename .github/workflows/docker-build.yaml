@@ -1,0 +1,86 @@
+name: docker-build reusable
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+      base_image:
+        required: true
+        type: string
+      sdk_ver:
+        required: true
+        type: string
+    secrets:
+      env_PAT:
+        required: true
+
+env:
+  GH_TOKEN: ${{ secrets.env_PAT }}
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set environment variables
+        run: |
+          base_image=${{ inputs.base_image }}
+          docker_tag=osrt-builder:${{ inputs.sdk_ver }}-${{ inputs.arch }}-${base_image//:/}
+          remote_docker_tag=ghcr.io/${{ github.repository_owner }}/$docker_tag
+          remote_docker_tag=${remote_docker_tag,,}
+          echo "docker_tag=${docker_tag}" >> $GITHUB_ENV
+          echo "remote_docker_tag=${remote_docker_tag}" >> $GITHUB_ENV
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.env_PAT }}
+
+      - name: Check if Docker image exists
+        id: check_image
+        run: |
+          echo $remote_docker_tag
+          if docker pull $remote_docker_tag; then
+            echo "Image exists"
+            echo "docker_image_exists=true" >> $GITHUB_ENV
+          else
+            echo "Image does not exist"
+            echo "docker_image_exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: Debug Environment Variable
+        run: echo "docker_image_exists=${{ env.docker_image_exists }}"
+
+      - name: Build and push Docker image
+        if: ${{ env.docker_image_exists == 'false' }}
+        run: |
+          BASE_IMAGE=${{ inputs.base_image }} ./docker_build.sh
+          docker images
+          # add a Docker label
+          echo "docker_tag = $docker_tag"
+          if [ "$(docker images -q $docker_tag 2> /dev/null)" == "" ]; then
+            echo "Docker image $docker_tag does not exist."
+            exit 1
+          else
+            echo "FROM --platform=linux/${{ inputs.arch }} $docker_tag" | \
+              docker build --label org.opencontainers.image.source=https://github.com/${{ github.repository }} -t $docker_tag -
+            docker inspect --format='{{json .Config.Labels}}' $docker_tag
+          fi
+          # push Docker image
+          docker tag $docker_tag $remote_docker_tag
+          docker push $remote_docker_tag
