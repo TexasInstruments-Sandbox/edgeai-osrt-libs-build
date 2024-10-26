@@ -49,11 +49,14 @@ else
     CMD="$@"
 fi
 
+deps_dir=${BASE_IMAGE//:/}-deps
+mkdir -p ${HOME}/${deps_dir}
+
 docker run -it --rm \
     -v ${PWD}/scripts:/root/osrt-build/scripts \
     -v ${PWD}/patches:/root/osrt-build/patches \
     -v ${PWD}/workarea:/root/osrt-build/workarea \
-    -v ${HOME}/${BASE_IMAGE//:/}-deps:/root/${BASE_IMAGE//:/}-deps \
+    -v ${HOME}/${deps_dir}:/root/${deps_dir} \
     --privileged \
     --network host \
     --env USE_PROXY=$USE_PROXY \

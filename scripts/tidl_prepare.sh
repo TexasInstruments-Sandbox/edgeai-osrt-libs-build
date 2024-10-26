@@ -26,8 +26,10 @@ fi
 protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
 REPO_DIR="${WORK_DIR}/workarea/protobuf-${protobuf_ver}"
 if [ ! -d "$REPO_DIR" ]; then
-    wget -q "https://github.com/protocolbuffers/protobuf/releases/download/v${protobuf_ver}/protobuf-cpp-${protobuf_ver}.tar.gz"
-    tar -xzf "protobuf-cpp-${protobuf_ver}.tar.gz"
+    tarball="protobuf-cpp-${protobuf_ver}.tar.gz"
+    wget -q "https://github.com/protocolbuffers/protobuf/releases/download/v${protobuf_ver}/${tarball}"
+    tar -xzf "${tarball}"
+    rm "${tarball}"
 else
     echo "Directory $REPO_DIR already exists. Skipping."
 fi
@@ -57,3 +59,5 @@ else
 fi
 
 cd ${current_dir}
+
+echo "tidl_prepare.sh: Completed!"

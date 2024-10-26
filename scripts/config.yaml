@@ -43,3 +43,8 @@ ti-rpmsg-char:
   tag: "0.6.7"
   branch: "master"
   commit: "5100a2e4a4a951e40ea0708fa78960770ec0ac33"
+
+vision-apps-lib-build:
+  url: "https://github.com/TexasInstruments-Sandbox/edgeai-vision-apps-lib-build/releases/download"
+  release: "10.00.00.08"
+  sdk_ver: "10.0.0"
