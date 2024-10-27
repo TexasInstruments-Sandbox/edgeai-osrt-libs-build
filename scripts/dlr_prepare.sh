@@ -24,6 +24,9 @@ extract_repo_info "arm-tidl"
 cd $WORK_DIR/workarea
 clone_repo "$repo_url" "$repo_tag" "$repo_branch" "$repo_commit" arm-tidl
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 cd $current_dir
 
 echo "$(basename $0): Completed!"

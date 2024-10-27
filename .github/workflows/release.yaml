@@ -21,6 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          set-safe-directory: false
           fetch-depth: 0  # ensure all tags are fetched
 
       - name: Set environment variables 1
@@ -317,3 +318,4 @@ jobs:
           asset_path: ${{ env.tidl_pkg_path_am62a_debian12-5 }}
           asset_name: ${{ env.tidl_pkg_name_am62a_debian12-5 }}
           asset_content_type: application/gzip
+
