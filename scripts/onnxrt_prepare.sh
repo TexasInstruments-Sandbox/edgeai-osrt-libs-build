@@ -35,6 +35,9 @@ curl -O -L "https://github.com/protocolbuffers/protobuf/releases/download/v${pro
 unzip "$zip_file" -d "onnxruntime/cmake/external/protoc-${protobuf_ver}-linux-aarch_64"
 rm "$zip_file"
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 cd $current_dir
 
 echo "$(basename $0): Completed!"

@@ -20,6 +20,9 @@ cd tensorflow
 copy_and_backup ../../patches/tensorflow/tensorflow/lite/tools/pip_package/build_pip_package_with_cmake.sh \
 tensorflow/lite/tools/pip_package/build_pip_package_with_cmake.sh
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 cd $current_dir
 
 echo "$(basename $0): Completed!"

@@ -57,6 +57,9 @@ else
     echo "Directory $REPO_DIR already exists. Skipping."
 fi
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 cd ${current_dir}
 
 echo "$(basename $0): Completed!"

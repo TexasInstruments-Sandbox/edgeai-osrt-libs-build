@@ -95,7 +95,7 @@ jobs:
       - name: Check for output files
         run: |
           set -e
-          whl_path=$(find workarea/onnxruntime/onnxruntime/build/Linux/Release/dist -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; })
+          whl_path=$(find workarea/onnxruntime/build/Linux/Release/dist -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl wheel package not found."; exit 1; })
           pkg_path=$(find workarea -maxdepth 1 -name "onnx-*.tar.gz" || { echo "onnx tarball not found."; exit 1; })
           whl_name=$(basename $whl_path)
           pkg_name=$(basename $pkg_path)

@@ -40,6 +40,9 @@ echo "tflite_build.sh: Completed!"
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 cd $current_dir
 
 echo "$(basename $0): Completed!"

@@ -38,6 +38,9 @@ SECONDS=0
 --use_tidl \
 --build_wheel
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 echo "onnxrt_build.sh: Completed!"
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."

@@ -61,6 +61,9 @@ for i in "${!platforms[@]}"; do
 
 done
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 cd $current_dir
 
 echo "$(basename $0): Completed!"

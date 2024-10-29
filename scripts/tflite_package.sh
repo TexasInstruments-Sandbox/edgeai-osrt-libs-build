@@ -57,6 +57,9 @@ cd "${WORK_DIR}/workarea"
 whl_path=$(find tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist -name "tflite_runtime*.whl" || { echo "tflite_runtime whl not found."; exit 1; })
 cp $whl_path .
 
+# chmod
+chmod -R a+w $WORK_DIR/workarea
+
 cd $current_dir
 
 echo "$(basename $0): Completed!"
