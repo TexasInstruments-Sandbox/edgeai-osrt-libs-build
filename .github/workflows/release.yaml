@@ -74,12 +74,12 @@ jobs:
           for base_image_ in ${base_images[@]}; do
             base_image=${base_image_//:/}
             base_image_var=${base_image//./-}
-            onnx_whl_path=$(find release/onnx-${base_image} -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl for ${base_image} wheel package not found."; exit 1; })
-            onnx_pkg_path=$(find release/onnx-${base_image} -name "onnx-*.tar.gz" || { echo "onnx tarball for ${base_image} not found."; exit 1; })
+            onnx_whl_path=$(find release/onnxrt-${base_image} -name "onnxruntime_tidl-*.whl" || { echo "onnxruntime_tidl for ${base_image} wheel package not found."; exit 1; })
+            onnx_pkg_path=$(find release/onnxrt-${base_image} -name "onnx-*.tar.gz" || { echo "onnx tarball for ${base_image} not found."; exit 1; })
             onnx_whl_name=$(basename ${onnx_whl_path})
             onnx_pkg_name=$(basename ${onnx_pkg_path})
-            tflite_whl_path=$(find release/tflite-${base_image} -name "tfj722slite_runtime*.whl" || { echo "tflite_runtime whl for ${base_image} not found."; exit 1; })
-            tflite_pkg_path=$(find release/tflite-${base_image} -name "tflite-*_aarch64.tar.gz" || { echo "tflite lib tarball for ${base_image} not found."; exit 1; })
+            tflite_whl_path=$(find release/tilite-${base_image} -name "tflite_runtime*.whl" || { echo "tflite_runtime whl for ${base_image} not found."; exit 1; })
+            tflite_pkg_path=$(find release/tilite-${base_image} -name "tflite-*_aarch64.tar.gz" || { echo "tflite lib tarball for ${base_image} not found."; exit 1; })
             tflite_whl_name=$(basename $tflite_whl_path)
             tflite_pkg_name=$(basename $tflite_pkg_path)
             dlr_whl_path=$(find release/dlr-${base_image} -name "dlr-*.whl" || { echo "dlr wheel package for ${base_image} not found."; exit 1; })

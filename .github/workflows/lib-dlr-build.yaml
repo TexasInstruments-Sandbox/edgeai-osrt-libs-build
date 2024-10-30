@@ -74,7 +74,6 @@ jobs:
           set -e
           # Remove '-it' in docker-run command in docker_run.sh
           sed -i.bak 's/docker run -it --rm/docker run --rm --platform linux\/arm64/' docker_run.sh
-          # sed -i.bak -e 's/docker run -it --rm/docker run --rm --platform linux\/arm64/' -e '/$DOCKER_TAG $CMD/i\    --env RUNNER=${USER} \\' docker_run.sh
           more docker_run.sh
           echo ${USER}
 
