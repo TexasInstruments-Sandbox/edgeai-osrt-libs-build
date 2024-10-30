@@ -1,4 +1,4 @@
-name: release-artifacts standalone-Ubuntu
+name: release-artifacts standalone-ubuntu
 
 on:
   workflow_dispatch:
@@ -73,6 +73,7 @@ jobs:
             onnx_pkg_path=$(find release/onnxrt-${base_image} -name "onnx-*.tar.gz" || { echo "onnx tarball for ${base_image} not found."; exit 1; })
             onnx_whl_name=$(basename ${onnx_whl_path})
             onnx_pkg_name=$(basename ${onnx_pkg_path})
+            #==> NOTE: Later changed from "release/tilite-${base_image}" to "release/tflite-${base_image}" in release-{ubuntu,debian}.yaml
             tflite_whl_path=$(find release/tilite-${base_image} -name "tflite_runtime*.whl" || { echo "tflite_runtime whl for ${base_image} not found."; exit 1; })
             tflite_pkg_path=$(find release/tilite-${base_image} -name "tflite-*_aarch64.tar.gz" || { echo "tflite lib tarball for ${base_image} not found."; exit 1; })
             tflite_whl_name=$(basename $tflite_whl_path)
@@ -211,106 +212,4 @@ jobs:
           asset_path: ${{ env.tidl_pkg_path_am62a_ubuntu22-04 }}
           asset_name: ${{ env.tidl_pkg_name_am62a_ubuntu22-04 }}
           asset_content_type: application/gzip
-
-      # ## Upload release: Debian 12.5
-      # - name: Upload onnx-whl-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.onnx_whl_path_debian12-5 }}
-      #     asset_name: ${{ env.onnx_whl_name_debian12-5 }}
-      #     asset_content_type: application/octet-stream
-
-      # - name: Upload onnx-pkg-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.onnx_pkg_path_debian12-5 }}
-      #     asset_name: ${{ env.onnx_pkg_name_debian12-5 }}
-      #     asset_content_type: application/gzip
-
-      # - name: Upload tflite-whl-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.tflite_whl_path_debian12-5 }}
-      #     asset_name: ${{ env.tflite_whl_name_debian12-5 }}
-      #     asset_content_type: application/octet-stream
-
-      # - name: Upload tflite-pkg-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.tflite_pkg_path_debian12-5 }}
-      #     asset_name: ${{ env.tflite_pkg_name_debian12-5 }}
-      #     asset_content_type: application/gzip
-
-      # - name: Upload dlr-whl-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.dlr_whl_path_debian12-5 }}
-      #     asset_name: ${{ env.dlr_whl_name_debian12-5 }}
-      #     asset_content_type: application/octet-stream
-
-      # ### ARM-TIDL for each platform
-      # - name: Upload tidl-j784s4-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.tidl_pkg_path_j784s4_debian12-5 }}
-      #     asset_name: ${{ env.tidl_pkg_name_j784s4_debian12-5 }}
-      #     asset_content_type: application/gzip
-
-      # - name: Upload tidl-j721s2-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.tidl_pkg_path_j721s2_debian12-5 }}
-      #     asset_name: ${{ env.tidl_pkg_name_j721s2_debian12-5 }}
-      #     asset_content_type: application/gzip
-
-      # - name: Upload tidl-j721e-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.tidl_pkg_path_j721e_debian12-5 }}
-      #     asset_name: ${{ env.tidl_pkg_name_j721e_debian12-5 }}
-      #     asset_content_type: application/gzip
-
-      # - name: Upload tidl-j722s-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.tidl_pkg_path_j722s_debian12-5 }}
-      #     asset_name: ${{ env.tidl_pkg_name_j722s_debian12-5 }}
-      #     asset_content_type: application/gzip
-
-      # - name: Upload tidl-am62a-debian12-5 to release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ env.tidl_pkg_path_am62a_debian12-5 }}
-      #     asset_name: ${{ env.tidl_pkg_name_am62a_debian12-5 }}
-      #     asset_content_type: application/gzip
 
