@@ -50,7 +50,7 @@ jobs:
             for platform in ${platforms[@]}; do
               tidl_pkg_name=arm-tidl-${platform}_${sdk_ver}-${base_image}.tar.gz
               echo "tidl_pkg_name_${platform}_${base_image_var}=${tidl_pkg_name}" >> $GITHUB_ENV
-              echo "tidl_pkg_path_${platform}_${base_image_var}=release-${base_image}/${tidl_pkg_name}" >> $GITHUB_ENV
+              echo "tidl_pkg_path_${platform}_${base_image_var}=release/tidl-${base_image}/${tidl_pkg_name}" >> $GITHUB_ENV
             done
           done
 
