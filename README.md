@@ -1,7 +1,7 @@
 Open-Source Runtime Library Build for Target Ubuntu/Debian Container
 ====================================================================
 
-This build system covers building *ONNX-RT*, *FTLite-RT*, *NEO-AI-DLR*, and *TIDL runtime modules* from source for Ubuntu/Debian Docker container. Tested in aarch64 Ubuntu 22.04 and aarch64 Debian 12.5 containers.
+This build system covers building *ONNX-RT*, *FTLite-RT*, *NEO-AI-DLR*, and *TIDL runtime modules* from source for Ubuntu/Debian systems running on TI's EdgeAI processors (TDA4VM, AM62A, AM67A, AM68A, and AM69A). Tested for aarch64 Ubuntu 22.04 and aarch64 Debian 12.5.
 
 Supported use cases include:
 
