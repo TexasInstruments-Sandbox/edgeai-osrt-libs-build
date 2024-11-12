@@ -124,6 +124,22 @@ RUN wget https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_${AR
     chmod +x /usr/local/bin/yq
 
 #=========================================================================
+# Added for gst-v4l2-build
+RUN apt-get update && apt-get install -y \
+    meson \
+    ninja-build \
+    pkg-config \
+    chrony \
+    xz-utils \
+    patch \
+    lsb-release && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y \
+    libgstreamer-plugins-base1.0-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+#=========================================================================
 # add scripts
 COPY entrypoint.sh /root/entrypoint.sh
 
