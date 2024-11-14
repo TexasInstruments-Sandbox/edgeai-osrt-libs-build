@@ -41,6 +41,9 @@ ARCH=arm64
 # SDK version
 : "${SDK_VER:=10.0.0}"
 
+# ti-rpmsg-char tag
+: "${RPMSG_VER:=0.6.7}"
+
 # docker tag
 DOCKER_TAG=osrt-builder:${SDK_VER}-${ARCH}-${BASE_IMAGE//:/}
 echo "DOCKER_TAG = $DOCKER_TAG"
@@ -79,6 +82,7 @@ docker build \
     --build-arg BASE_IMAGE=$BASE_IMAGE \
     --build-arg USE_PROXY=$USE_PROXY \
     --build-arg HTTP_PROXY=$HTTP_PROXY \
+    --build-arg RPMSG_VER=$RPMSG_VER \
     -f Dockerfile $DST_DIR
 echo "Docker build -t $DOCKER_TAG completed!"
 duration=$SECONDS

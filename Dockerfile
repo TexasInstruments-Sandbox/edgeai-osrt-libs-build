@@ -32,6 +32,7 @@ ARG ARCH
 ARG BASE_IMAGE
 ARG USE_PROXY
 ARG HTTP_PROXY
+ARG RPMSG_VER
 ARG DEBIAN_FRONTEND=noninteractive
 
 #=========================================================================
@@ -49,6 +50,7 @@ ENV https_proxy=${HTTP_PROXY}
 FROM base-${USE_PROXY}
 ARG ARCH
 ARG BASE_IMAGE
+ARG RPMSG_VER
 ARG DEBIAN_FRONTEND
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -104,7 +106,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # build and install ti-rpmsg-char: update the tag info in each release
 WORKDIR /opt
-RUN git clone git://git.ti.com/rpmsg/ti-rpmsg-char.git --branch 0.6.7 --depth 1 --single-branch && \
+RUN git clone git://git.ti.com/rpmsg/ti-rpmsg-char.git --branch ${RPMSG_VER} --depth 1 --single-branch && \
     cd /opt/ti-rpmsg-char && \
     autoreconf -i && ./configure --host=aarch64-none-linux-gnu --prefix=/usr && \
     make && make install && \
