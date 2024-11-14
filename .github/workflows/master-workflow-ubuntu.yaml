@@ -55,6 +55,16 @@ jobs:
       base_image: "ubuntu:22.04"
       sdk_ver: 10.0.0
 
+  gst_v4l2_build_ubuntu22-04:
+    needs: docker_build_ubuntu22-04
+    uses: ./.github/workflows/lib-gst-v4l2-build.yaml
+    secrets:
+      env_PAT: ${{ secrets.GHCR_PAT }}
+    with:
+      arch: arm64
+      base_image: "ubuntu:22.04"
+      sdk_ver: 10.0.0
+
   ## Release
   release_ubuntu22-04:
     uses: ./.github/workflows/release-ubuntu.yaml

@@ -83,6 +83,8 @@ jobs:
             tflite_pkg_name=$(basename $tflite_pkg_path)
             dlr_whl_path=$(find release/dlr-${base_image} -name "dlr-*.whl" || { echo "dlr wheel package for ${base_image} not found."; exit 1; })
             dlr_whl_name=$(basename $dlr_whl_path)
+            gst_v4l2_pkg_path=$(find release/gst-v4l2-${base_image} -name "libgstvideo4linux2*.so" || { echo "gst-v4l2 package for ${base_image} not found."; exit 1; })
+            gst_v4l2_pkg_name=$(basename $gst_v4l2_pkg_path)
             # set env variables
             echo "onnx_whl_path_${base_image_var}=${onnx_whl_path}" >> $GITHUB_ENV
             echo "onnx_whl_name_${base_image_var}=${onnx_whl_name}" >> $GITHUB_ENV
@@ -94,6 +96,8 @@ jobs:
             echo "tflite_pkg_name_${base_image_var}=${tflite_pkg_name}" >> $GITHUB_ENV
             echo "dlr_whl_path_${base_image_var}=${dlr_whl_path}" >> $GITHUB_ENV
             echo "dlr_whl_name_${base_image_var}=${dlr_whl_name}" >> $GITHUB_ENV
+            echo "gst_v4l2_pkg_path_${base_image_var}=${gst_v4l2_pkg_path}" >> $GITHUB_ENV
+            echo "gst_v4l2_pkg_name_${base_image_var}=${gst_v4l2_pkg_name}" >> $GITHUB_ENV
           done
 
       - name: Create GitHub Release
@@ -215,3 +219,15 @@ jobs:
           asset_path: ${{ env.tidl_pkg_path_am62a_ubuntu22-04 }}
           asset_name: ${{ env.tidl_pkg_name_am62a_ubuntu22-04 }}
           asset_content_type: application/gzip
+
+      ### gst-v4l2 lib
+      - name: Upload gst-v4l2-ubuntu22-04 to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.gh_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.gst_v4l2_pkg_path_ubuntu22-04 }}
+          asset_name: ${{ env.gst_v4l2_pkg_name_ubuntu22-04 }}
+          asset_content_type: application/x-sharedlib
+
