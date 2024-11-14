@@ -12,7 +12,7 @@ jobs:
     with:
       arch: arm64
       base_image: "debian:12.5"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   ## Library build: Debian 12.5
   onnxrt_build_debian12-5:
@@ -23,7 +23,7 @@ jobs:
     with:
       arch: arm64
       base_image: "debian:12.5"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   tflite_build_debian12-5:
     needs: docker_build_debian12-5
@@ -33,7 +33,7 @@ jobs:
     with:
       arch: arm64
       base_image: "debian:12.5"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   dlr_build_debian12-5:
     needs: docker_build_debian12-5
@@ -43,7 +43,7 @@ jobs:
     with:
       arch: arm64
       base_image: "debian:12.5"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   tidl_build_debian12-5:
     needs: docker_build_debian12-5
@@ -53,7 +53,7 @@ jobs:
     with:
       arch: arm64
       base_image: "debian:12.5"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   ## Release
   release_debian12-5:
@@ -66,4 +66,4 @@ jobs:
     secrets:
       gh_TOKEN: ${{ secrets.GHCR_PAT }}
     with:
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0

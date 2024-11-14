@@ -1,19 +1,19 @@
-# PSDK-Linux for EdgeAI 10.00.00.08
+# PSDK-Linux for EdgeAI: 10.01.00.01
 
 # Below are for osrt-build. References:
 # https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-tidl/ti-tidl.bb?h=scarthgap
 # https://git.ti.com/cgit/edgeai/meta-edgeai/tree/recipes-tisdk/ti-tidl/ti-tidl-osrt.bb?h=scarthgap
 arm-tidl:
   url: "https://git.ti.com/git/processor-sdk-vision/arm-tidl.git"
-  tag: "REL.PSDK.ANALYTICS.10.00.00.04"
+  tag: "REL.PSDK.ANALYTICS.10.01.00.01"
   branch: "master"
-  commit: "d71785f6619bcc07f2fc6ed59cefe1de8fb18288"
+  commit: "78a9795ab5a4acb070f7ef91072114fdaf1e968e"
 
 concerto:
   url: "https://git.ti.com/git/processor-sdk/concerto.git"
-  tag: "REL.PSDK.ANALYTICS.10.00.00.04"
+  tag: "REL.PSDK.ANALYTICS.10.01.00.01"
   branch: "main"
-  commit: "38b9190a5d335e58d81d21e3e058b11e5c47c605"
+  commit: "68d69c7d7623590b7f0311277708699428387709"
 
 onnxruntime:
   url: "https://github.com/TexasInstruments/onnxruntime.git"
@@ -46,5 +46,5 @@ ti-rpmsg-char:
 
 vision-apps-lib-build:
   url: "https://github.com/TexasInstruments-Sandbox/edgeai-vision-apps-lib-build/releases/download"
-  release: "10.00.00.08"
-  sdk_ver: "10.0.0"
+  release: "10.01.00.01"
+  sdk_ver: "10.1.0"

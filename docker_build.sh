@@ -39,7 +39,7 @@ ARCH=arm64
 : "${BASE_IMAGE:=ubuntu:22.04}"
 
 # SDK version
-: "${SDK_VER:=10.0.0}"
+: "${SDK_VER:=10.1.0}"
 
 # ti-rpmsg-char tag
 : "${RPMSG_VER:=0.6.7}"

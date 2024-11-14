@@ -12,7 +12,7 @@ jobs:
     with:
       arch: arm64
       base_image: "ubuntu:22.04"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   ## Library build: Ubuntu 22.04
   onnxrt_build_ubuntu22-04:
@@ -23,7 +23,7 @@ jobs:
     with:
       arch: arm64
       base_image: "ubuntu:22.04"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   tflite_build_ubuntu22-04:
     needs: docker_build_ubuntu22-04
@@ -33,7 +33,7 @@ jobs:
     with:
       arch: arm64
       base_image: "ubuntu:22.04"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   dlr_build_ubuntu22-04:
     needs: docker_build_ubuntu22-04
@@ -43,7 +43,7 @@ jobs:
     with:
       arch: arm64
       base_image: "ubuntu:22.04"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   tidl_build_ubuntu22-04:
     needs: docker_build_ubuntu22-04
@@ -53,7 +53,7 @@ jobs:
     with:
       arch: arm64
       base_image: "ubuntu:22.04"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   gst_v4l2_build_ubuntu22-04:
     needs: docker_build_ubuntu22-04
@@ -63,7 +63,7 @@ jobs:
     with:
       arch: arm64
       base_image: "ubuntu:22.04"
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
 
   ## Release
   release_ubuntu22-04:
@@ -73,7 +73,8 @@ jobs:
       - tflite_build_ubuntu22-04
       - dlr_build_ubuntu22-04
       - tidl_build_ubuntu22-04
+      - gst_v4l2_build_ubuntu22-04
     secrets:
       gh_TOKEN: ${{ secrets.GHCR_PAT }}
     with:
-      sdk_ver: 10.0.0
+      sdk_ver: 10.1.0
