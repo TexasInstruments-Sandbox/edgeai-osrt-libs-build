@@ -10,7 +10,7 @@ fi
 current_dir=$(pwd)
 cd $WORK_DIR/workarea
 
-# base_image 
+# base_image
 base_image=${BASE_IMAGE//:/}
 
 # target platforms
@@ -51,6 +51,17 @@ for i in "${!platforms[@]}"; do
     rm -rf $DST_DIR
     mkdir -p $DST_DIR
     copy_lib_files "$DST_DIR" "${tidl_lib_files[@]}"
+
+    # package header files
+    mkdir -p $DST_DIR/include/arm-tidl/rt/inc
+    if [ -d "arm-tidl/rt/inc" ]; then
+        cp arm-tidl/rt/inc/itidl_rt.h $DST_DIR/include/arm-tidl/rt/inc
+        cp arm-tidl/rt/inc/itidl_ti.h $DST_DIR/include/arm-tidl/rt/inc
+        cp arm-tidl/rt/inc/itvm_rt.h  $DST_DIR/include/arm-tidl/rt/inc
+    else
+        echo "Warning: arm-tidl/rt/inc directory not found"
+        exit 1
+    fi
 
     # make the tarball
     if [ -z "$TARBALL" ]; then

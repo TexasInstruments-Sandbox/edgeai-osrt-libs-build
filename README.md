@@ -187,3 +187,10 @@ Outputs:
 - TIDL-RT library: `$WORK_DIR/workarea/arm-tidl/rt/out/${SOC}/${MPU}/LINUX/release/libvx_tidl_rt.so.1.0`
 - TFLite-RT delegate library: `$WORK_DIR/workarea/arm-tidl/tfl_delegate/out/${SOC}/${MPU}/LINUX/release/libtidl_tfl_delegate.so.1.0`
 - ONNX-RT EP library: `$WORK_DIR/workarea/arm-tidl/onnxrt_ep/out/${SOC}/${MPU}/LINUX/release/libtidl_onnxrt_EP.so.1.0`
+
+### Package
+
+```bash
+./tidl_package.sh
+
+Output tarball: `$WORK_DIR/workarea/arn-tidl-${SOC}-${SDK_VER}-ubuntu22.04.tar.gz`
