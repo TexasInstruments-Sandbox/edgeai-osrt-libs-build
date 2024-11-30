@@ -84,9 +84,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python3 -m pip install --upgrade pip; \
     fi && \
     if echo ${BASE_IMAGE} | grep -q "debian" || echo ${BASE_IMAGE} | grep -q "ubuntu:24.04"; then \
-        python3 -m pip install --break-system-packages numpy setuptools wheel pybind11 pytest; \
+        python3 -m pip install --break-system-packages numpy setuptools wheel pybind11 pytest flatbuffers; \
     else \
-        python3 -m pip install numpy setuptools wheel pybind11 pytest; \
+        python3 -m pip install numpy setuptools wheel pybind11 pytest flatbuffers; \
     fi && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

@@ -14,7 +14,7 @@ cd $WORK_DIR/workarea
 ## package into a tarball
 onnx_ver=$(get_yaml_value "onnxruntime" "onnx_ver")
 pkg_dist=${BASE_IMAGE//:/}
-DST_DIR="onnx-${onnx_ver}+${tidl_ver}-${pkg_dist}_aarch64"
+DST_DIR="onnx-${onnx_ver}-${pkg_dist}_aarch64"
 LIB_DIR="onnxruntime/build/Linux/Release"
 TARBALL="${DST_DIR}.tar.gz"
 

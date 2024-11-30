@@ -36,7 +36,8 @@ SECONDS=0
 --cmake_extra_defines="CMAKE_TOOLCHAIN_FILE=$(pwd)/tool.cmake" \
 --path_to_protoc_exe $(pwd)/cmake/external/protoc-${protobuf_ver}-linux-aarch_64/bin/protoc \
 --use_tidl \
---build_wheel
+--build_wheel \
+--allow_running_as_root
 
 # chmod
 chmod -R a+w $WORK_DIR/workarea
