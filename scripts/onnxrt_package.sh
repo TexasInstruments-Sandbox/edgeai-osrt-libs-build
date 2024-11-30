@@ -13,7 +13,6 @@ cd $WORK_DIR/workarea
 
 ## package into a tarball
 onnx_ver=$(get_yaml_value "onnxruntime" "onnx_ver")
-tidl_ver=$(get_yaml_value "onnxruntime" "tidl_ver")
 pkg_dist=${BASE_IMAGE//:/}
 DST_DIR="onnx-${onnx_ver}+${tidl_ver}-${pkg_dist}_aarch64"
 LIB_DIR="onnxruntime/build/Linux/Release"
@@ -23,7 +22,7 @@ rm -rf "$DST_DIR"
 mkdir -p "${DST_DIR}/onnxruntime"
 
 # package .so
-src_lib_file="${LIB_DIR}/libonnxruntime.so.${onnx_ver}+${tidl_ver}"
+src_lib_file="${LIB_DIR}/libonnxruntime.so.${onnx_ver}"
 if [ -f "$src_lib_file" ]; then
     cp "$src_lib_file" "$DST_DIR"
 else

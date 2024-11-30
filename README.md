@@ -61,14 +61,16 @@ BASE_IMAGE=debian:12.5  ./docker_run.sh
 ```
 
 <!-- ======================================= -->
+## Git Tags for the Source Git Repositories
+
+All Git tags and parameters compatible with a specific Processor SDK release are captured in `scripts/config.yaml`. Each script parses the relevant Git tags and parameters from this YAML file. Please note that any instructions for parameter updates provided below are for informational purposes only.
+
+<!-- ======================================= -->
 ## Build ONNX-RT from Source
 
 All the commends below should be run **in the Docker container**.
 
 ### Prepare the source and update the build config
-
-Update `PROTOBUF_VER` in `onnxrt_prepare.sh` by, e.g., checking "`git log`" at `onnxruntime/cmake/external/protobuf`. Currently it is set:
-`PROTOBUF_VER=3.20.2`.
 
 
 You can run the following in the Docker container for downloading source from git repo, applying patches, and downloading pre-built `protobuf`:
@@ -77,7 +79,8 @@ You can run the following in the Docker container for downloading source from gi
 ```
 
 ### Build
-Update `PROTOBUF_VER` to match to the setting in `onnxrt_prepare.sh`. The following should be run in the Docker container with QEMU.
+
+The following should be run in the Docker container.
 
 (Optional) To build `protobuf` from source, run the following inside the container.
 ```bash
@@ -90,8 +93,8 @@ Update "`--path_to_protoc_exe`" in `onnxrt_build.sh` accordingly. To build ONNX-
 ```
 
 Outputs:
-- Shared lib: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/libonnxruntime.so.1.14.0+${TIDL_VER}`
-- Wheel file: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+${TIDL_VER}-cp310-cp310-linux_aarch64.whl`
+- Shared lib: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/libonnxruntime.so.1.15.0`
+- Wheel file: `$WORK_DIR/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.15.0-cp310-cp310-linux_aarch64.whl`
 
 ### Package
 
@@ -99,7 +102,7 @@ Outputs:
 ./onnxrt_package.sh
 ```
 
-Output tarball: `$WORK_DIR/workarea/onnx-1.14.0-ubuntu22.04_aarch64.tar.gz`
+Output tarball: `$WORK_DIR/workarea/onnx-1.15.0-ubuntu22.04_aarch64.tar.gz`
 
 <!-- ======================================= -->
 ## Build TFLite-RT from Source

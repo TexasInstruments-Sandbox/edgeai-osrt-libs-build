@@ -22,17 +22,17 @@ git submodule init
 git submodule update --init --recursive
 
 # update tool.cmake
-# TODO: eleminate this step. Instead pass env variables.
+# TODO: eliminate this step. Instead pass env variables?
 mv tool.cmake tool.cmake_ORG
 cp ../../patches/onnxruntime/tool.cmake .
 
-# pre-built protobuf
-# update protobuf_ver by, e.g., "git log" at <onnxruntime>/cmake/external/protobuf
+# install the protobuf
 protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
-zip_file="protoc-${protobuf_ver}-linux-aarch_64.zip"
+protobuf_ver_rel=$(get_yaml_value "onnxruntime" "protobuf_ver_rel")
+zip_file="protoc-${protobuf_ver_rel}-linux-aarch_64.zip"
 cd $WORK_DIR/workarea
-curl -O -L "https://github.com/protocolbuffers/protobuf/releases/download/v${protobuf_ver}/${zip_file}"
-unzip "$zip_file" -d "onnxruntime/cmake/external/protoc-${protobuf_ver}-linux-aarch_64"
+curl -O -L "https://github.com/protocolbuffers/protobuf/releases/download/v${protobuf_ver_rel}/${zip_file}" || { echo "Error: Failed to download $zip_file."; exit 1; }
+unzip "$zip_file" -d "onnxruntime/cmake/external/protoc-${protobuf_ver}-linux-aarch_64" || { echo "Error: Failed to unzip $zip_file."; exit 1; }
 rm "$zip_file"
 
 # chmod

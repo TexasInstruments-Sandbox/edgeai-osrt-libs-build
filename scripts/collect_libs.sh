@@ -12,15 +12,16 @@ fi
 
 TARGET_DIR=$HOME/ubuntu22-deps
 
-tidl_ver=$(get_yaml_value "onnxruntime" "tidl_ver")
+onnx_ver=$(get_yaml_value "onnxruntime" "onnx_ver")
+# tidl_ver=$(get_yaml_value "onnxruntime" "tidl_ver")
 
 # rm -rf $TARGET_DIR
 mkdir -p $TARGET_DIR
 
 lib_files=(
     # ONNX
-    "$HOME/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-1.14.0+${tidl_ver}-cp310-cp310-linux_aarch64.whl"
-    "$HOME/osrt-build/workarea/onnx-1.14.0+${tidl_ver}-ubuntu22.04_aarch64.tar.gz"
+    "$HOME/osrt-build/workarea/onnxruntime/build/Linux/Release/dist/onnxruntime_tidl-${onnx_ver}-cp310-cp310-linux_aarch64.whl"
+    "$HOME/osrt-build/workarea/onnx-${onnx_ver}+${tidl_ver}-ubuntu22.04_aarch64.tar.gz"
     # TFLite
     "$HOME/osrt-build/workarea/tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.12.0-cp310-cp310-linux_aarch64.whl"
     "$HOME/osrt-build/workarea/tflite-2.12-ubuntu22.04_aarch64.tar.gz"

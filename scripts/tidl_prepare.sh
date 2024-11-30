@@ -25,8 +25,8 @@ fi
 protobuf_ver=$(get_yaml_value "onnxruntime" "protobuf_ver")
 REPO_DIR="${WORK_DIR}/workarea/protobuf-${protobuf_ver}"
 if [ ! -d "$REPO_DIR" ]; then
-    tarball="protobuf-cpp-${protobuf_ver}.tar.gz"
-    wget -q "https://github.com/protocolbuffers/protobuf/releases/download/v${protobuf_ver}/${tarball}"
+    tarball="v${protobuf_ver}.tar.gz"
+    wget -q "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v${protobuf_ver}/${tarball}"
     tar -xzf "${tarball}"
     rm "${tarball}"
 else
