@@ -13,7 +13,6 @@ fi
 TARGET_DIR=$HOME/ubuntu22-deps
 
 onnx_ver=$(get_yaml_value "onnxruntime" "onnx_ver")
-# tidl_ver=$(get_yaml_value "onnxruntime" "tidl_ver")
 
 # rm -rf $TARGET_DIR
 mkdir -p $TARGET_DIR

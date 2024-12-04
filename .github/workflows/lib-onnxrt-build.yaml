@@ -49,9 +49,9 @@ jobs:
           remote_docker_tag=ghcr.io/${{ github.repository_owner }}/$docker_tag
           remote_docker_tag=${remote_docker_tag,,}
           # package names: moved down
-          # whl_name=onnxruntime_tidl-1.14.0+${{ inputs.tidl_ver }}-cp310-cp310-linux_aarch64.whl
+          # whl_name=onnxruntime_tidl-1.15.0-cp310-cp310-linux_aarch64.whl
           # whl_path=workarea/onnxruntime/build/Linux/Release/dist/${whl_name}
-          # pkg_name=onnx-1.14.0+${{ inputs.tidl_ver }}-${base_image//:/}_aarch64.tar.gz
+          # pkg_name=onnx-1.15.0-${base_image//:/}_aarch64.tar.gz
           # pkg_path=workarea/${pkg_name}
           # artifacts dir
           artifacts_name=onnxrt-${base_image//:/}
