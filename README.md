@@ -24,14 +24,14 @@ Supported use cases include:
 
 Pull the baseline Docker image needed. Assuming outside of a proxy network,
 ```bash
-docker pull arm64v8/ubuntu:22.04
-docker pull arm64v8/ubuntu:20.04
-docker pull arm64v8/debian:12.5
+docker pull --platform linux/arm64 arm64v8/ubuntu:22.04
+docker pull --platform linux/arm64 arm64v8/ubuntu:20.04
+docker pull --platform linux/arm64 arm64v8/debian:12.5
 ```
 
 ### edgeai-ti-proxy (only required to make the build system work in TI proxy network)
 
-Set up `edgeai-ti-proxy` ([repo link](https://bitbucket.itg.ti.com/projects/PROCESSOR-SDK-VISION/repos/edgeai-ti-proxy/browse))
+Set up `edgeai-ti-proxy` git repository (TI-internal only).
 
 Before docker-build or docker-run, please make sure sourcing `edgeai-ti-proxy/setup_proxy.sh`, which will define the `USE_PROXY` env variable and all the proxy settings for the TI network.
 
